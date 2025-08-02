@@ -14,7 +14,7 @@ namespace NostalgiaBackend.Controllers
 
     [ApiController]
     [Route("api/feed")]
-    public class FeedController(PostContext context) : ControllerBase
+    public class FeedController(PostContext context, HoverthInput hoverth) : ControllerBase
     {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -27,7 +27,7 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("URL is required");
             }
 
-            var feed = await HoverthInput.AddFeed(request.Url);
+            var feed = await hoverth.AddFeed(request.Url);
 
             context.Feeds.Add(feed);
 
@@ -69,7 +69,7 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("Feed not found");
             }
 
-            var newFeed = await HoverthInput.AddFeed(feed.Url);
+            var newFeed = await hoverth.AddFeed(feed.Url);
 
             if (newFeed == null)
             {

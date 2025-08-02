@@ -3,7 +3,7 @@ using Shared.Database;
 
 namespace NostalgiaBackend.Services
 {
-    public class DbInitializer(IServiceProvider serviceProvider) : IHostedService
+    public class DbInitializer(IServiceProvider serviceProvider, HoverthInput hoverth) : IHostedService
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
@@ -28,7 +28,7 @@ namespace NostalgiaBackend.Services
             {
                 try
                 {
-                    var feed = await HoverthInput.AddFeed(url);
+                    var feed = await hoverth.AddFeed(url);
                     if (feed != null)
                     {
                         await context.Feeds.AddAsync(feed, cancellationToken);

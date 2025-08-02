@@ -1,4 +1,5 @@
 ﻿using CodeHollow.FeedReader;
+using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using Feed = Shared.Models.Feed;
 using Shared.Models;
@@ -6,16 +7,17 @@ using Shared.Files;
 
 namespace HoverthArchiver
 {
-    public class HoverthInput
+    public class HoverthInput(ILogger<HoverthInput> logger)
     {
         private const string _basePath = "/tmp/";
+        private readonly ILogger<HoverthInput> _logger = logger;
 
-        private static readonly HttpClient _httpClient = new()
+        private readonly HttpClient _httpClient = new()
         {
-            Timeout = new TimeSpan(0,5,0) // 5 minute timeout,
+            Timeout = new TimeSpan(0, 5, 0) // 5 minute timeout,
         };
 
-        public static async Task<Feed> AddFeed(string url, Platform platform = Platform.RSS)
+        public async Task<Feed> AddFeed(string url, Platform platform = Platform.RSS)
         {
             if (url.Contains("reddit.com"))
             {
@@ -29,17 +31,16 @@ namespace HoverthArchiver
 
             return await RssAsync(url, platform);
         }
-        
-        private static async Task<Feed> Reddit(string url)
+
+        private async Task<Feed> Reddit(string url)
         {
-            Console.WriteLine(url);
+            _logger.LogInformation("Processing Reddit URL: {Url}", url);
             var rssUrl = url + ".rss";
-            //var rss_url = FeedReader.GetFeedUrlsFromUrl(url).First().Url;
-            Console.WriteLine(rssUrl);
+            _logger.LogInformation("Generated RSS URL: {RssUrl}", rssUrl);
             return await RssAsync(rssUrl, Platform.Reddit);
         }
 
-        private static async Task<Feed> YouTube(string url)
+        private async Task<Feed> YouTube(string url)
         {
             // change yt channel link into https://www.youtube.com/feeds/videos.xml?channel_id=UCRC6cNamj9tYAO6h_RXd5xA format
             // https://www.youtube.com/channel/UCRC6cNamj9tYAO6h_RXd5xA
@@ -49,7 +50,7 @@ namespace HoverthArchiver
             return await RssAsync(rssUrl, Platform.YouTube);
         }
 
-        private static async Task<string> DownloadFile(string url)
+        private async Task<string> DownloadFile(string url)
         {
             var remoteFilename = url.Split('/').Last().Split('?').First();
             var extension = remoteFilename.Split('.').Last();
@@ -62,25 +63,25 @@ namespace HoverthArchiver
             return filename;
         }
 
-        private static async Task<Feed> RssAsync(string url, Platform platform = Platform.RSS)
+        private async Task<Feed> RssAsync(string url, Platform platform = Platform.RSS)
         {
             HtmlParser parser = new();
             var feed = await FeedReader.ReadAsync(url);
 
-            Console.WriteLine("Feed Title: " + feed.Title);
-            Console.WriteLine("Feed Description: " + feed.Description);
-            Console.WriteLine("Feed Image: " + feed.ImageUrl);
+            _logger.LogInformation("Feed Title: {Title}", feed.Title);
+            _logger.LogInformation("Feed Description: {Description}", feed.Description);
+            _logger.LogInformation("Feed Image: {ImageUrl}", feed.ImageUrl);
 
             List<Post> postList = [];
-            
+
             foreach (var item in feed.Items)
             {
-                Console.WriteLine(item.Title + " - " + item.Link);
+                _logger.LogInformation("Processing item: {Title} - {Link}", item.Title, item.Link);
 
                 var textContent = parser.FlattenText(item.Content);
                 var imageUrls = parser.GetImages(item.Content);
                 var videoUrls = parser.GetVideos(item.Content);
-                var documentUrls =  parser.GetDocuments(item.Content);
+                var documentUrls = parser.GetDocuments(item.Content);
 
                 List<Media> mediaList = [];
 
@@ -93,7 +94,7 @@ namespace HoverthArchiver
                     };
                     mediaList.Add(media);
                 }
-                
+
                 foreach (var video in videoUrls)
                 {
                     var media = new Media()
@@ -113,7 +114,7 @@ namespace HoverthArchiver
                     };
                     mediaList.Add(media);
                 }
-                             
+
                 var post = new Post()
                 {
                     Description = item.Description ?? string.Empty,
