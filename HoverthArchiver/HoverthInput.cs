@@ -71,7 +71,7 @@ namespace HoverthArchiver
             Console.WriteLine("Feed Description: " + feed.Description);
             Console.WriteLine("Feed Image: " + feed.ImageUrl);
 
-            List<Post> postList = new List<Post>();
+            List<Post> postList = [];
             
             foreach (var item in feed.Items)
             {
@@ -82,7 +82,7 @@ namespace HoverthArchiver
                 var videoUrls = parser.GetVideos(item.Content);
                 var documentUrls =  parser.GetDocuments(item.Content);
 
-                List<Media> mediaList = new List<Media>();
+                List<Media> mediaList = [];
 
                 foreach (var image in imageUrls)
                 {

@@ -1,7 +1,6 @@
 ﻿using HoverthArchiver;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Database;
-using Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace NostalgiaBackend.Controllers

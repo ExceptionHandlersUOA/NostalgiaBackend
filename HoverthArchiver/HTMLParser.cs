@@ -36,7 +36,7 @@ public class HtmlParser
 
     private List<string> GetElementsByAttribute(IHtmlDocument document, string elementName, string attributeName)
     {
-        List<string> sourceUrls = new();
+        List<string> sourceUrls = [];
         var elements = document.QuerySelectorAll(elementName);
         foreach(var e in elements)
         {
@@ -57,7 +57,7 @@ public class HtmlParser
 
     private List<string> ProcessHyperlinks(List<string> links, string[] acceptableExtensions)
     {
-        List<string> sourceUrls = new();
+        List<string> sourceUrls = [];
         foreach (var link in links)
         {
             var extension = link.Split('?').First().Split('/').Last().Split('.').Last();
@@ -81,7 +81,7 @@ public class HtmlParser
     
     public List<string> GetVideos(string html)
     {
-        List<string> videos = new();
+        List<string> videos = [];
         var document = parser.ParseDocument(html);
         videos.Concat(GetElementSources(document, "video"));
         var videoLinks = GetElementHyperlinks(document, "a"); 
@@ -91,7 +91,7 @@ public class HtmlParser
     }
     public List<string> GetImages(string html)
     {
-        List<string> images = new();
+        List<string> images = [];
         var document = parser.ParseDocument(html);
         images.Concat(GetElementSources(document, "images"));
         var imageLinks = GetElementHyperlinks(document, "a"); 
@@ -102,7 +102,7 @@ public class HtmlParser
     
     public List<string> GetDocuments(string html)
     {
-        List<string> documents = new();
+        List<string> documents = [];
         var document = parser.ParseDocument(html);
         var documentLinks = GetElementHyperlinks(document, "a");
         documents.Concat(ProcessHyperlinks(documentLinks, _documentExtensions));

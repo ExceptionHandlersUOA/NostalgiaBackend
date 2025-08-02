@@ -2,10 +2,8 @@
 
 namespace Shared.Models
 {
-    public class Media
+    public class Media : CustomMedia
     {
         public int MediaId { get; set; }
-        public FileType Type { get; set; } = FileType.Unknown;
-        public string FileName { get; set; } = string.Empty;
     }
 }

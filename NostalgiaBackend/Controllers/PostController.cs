@@ -2,24 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.Database;
 using Shared.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace NostalgiaBackend.Controllers
 {
-    public class AddCustomPostRequest
-    {
-        [Required]
-        public string Title { get; set; } = string.Empty;
-        [Required]
-        public string Description { get; set; } = string.Empty;
-        public string Body { get; set; } = string.Empty;
-        public string SourceUrl { get; set; } = string.Empty;
-        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
-        public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
-        public List<string> Categories { get; set; } = [];
-        public bool Favourited { get; set; } = false;
-    }
-
     [ApiController]
     [Route("api/post/{postId}")]
     public class PostController(PostContext context) : Controller
