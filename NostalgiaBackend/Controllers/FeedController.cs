@@ -55,5 +55,81 @@ namespace NostalgiaBackend.Controllers
 
             return Ok();
         }
+
+        [HttpPut("{feedId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int feedId, [FromBody, Required] AddFeedUrlRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Url))
+            {
+                return BadRequest("URL is required");
+            }
+
+            var feed = await context.Feeds.FindAsync(feedId);
+
+            if (feed == null)
+            {
+                return BadRequest("Feed not found");
+            }
+
+            var newFeed = await HoverthInput.AddFeed(request.Url);
+
+            if (newFeed == null)
+            {
+                return BadRequest("Failed to update feed");
+            }
+
+            feed.Title = newFeed.Title;
+            feed.Description = newFeed.Description;
+            feed.ImageUrl = newFeed.ImageUrl;
+            feed.Url = newFeed.Url;
+            feed.Platform = newFeed.Platform;
+
+            var existingPostsLookup = feed.Posts.ToDictionary(p => p.SourceUrl, p => p);
+
+            foreach (var newPost in newFeed.Posts)
+            {
+                if (existingPostsLookup.TryGetValue(newPost.SourceUrl, out var existingPost))
+                {
+                    existingPost.Title = newPost.Title;
+                    existingPost.Description = newPost.Description;
+                    existingPost.Body = newPost.Body;
+                    existingPost.LastUpdated = newPost.LastUpdated;
+                    existingPost.PublishedAt = newPost.PublishedAt;
+                    existingPost.Categories = newPost.Categories;
+
+                    var existingMediaLookup = existingPost.Media.ToDictionary(m => m.FileName, m => m);
+                    
+                    foreach (var newMedia in newPost.Media)
+                    {
+                        if (existingMediaLookup.TryGetValue(newMedia.FileName, out var existingMedia))
+                        {
+                            existingMedia.Type = newMedia.Type;
+                        }
+                        else
+                        {
+                            context.Media.Add(newMedia);
+                            await context.SaveChangesAsync();
+
+                            existingPost.Media.Add(newMedia);
+                        }
+                    }
+                }
+                else
+                {
+                    context.Posts.Add(newPost);
+                    await context.SaveChangesAsync();
+
+                    feed.Posts.Add(newPost);
+                }
+            }
+
+            context.Feeds.Update(feed);
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
     }
 }
