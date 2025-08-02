@@ -9,6 +9,7 @@
         RSS,
         LinkedIn,
         Twitter,
-        Reddit
+        Reddit,
+        Custom
     }
 }

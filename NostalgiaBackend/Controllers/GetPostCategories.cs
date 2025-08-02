@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Database;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-public class CategoryRequest
-{
-    [Required]
-    [Url]
-    public string Category { get; set; } = string.Empty;
-}
 
 namespace NostalgiaBackend.Controllers
 {
+    public class CategoryRequest
+    {
+        [Required]
+        public string Category { get; set; } = string.Empty;
+    }
+
     [ApiController]
     [Route("api/getPost/{postId}/categories")]
     public class GetPostCategories(PostContext _context) : ControllerBase
