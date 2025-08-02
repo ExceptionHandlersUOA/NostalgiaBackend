@@ -59,7 +59,7 @@ namespace NostalgiaBackend.Controllers
 
             post.Categories.Remove(request.Category);
 
-            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
