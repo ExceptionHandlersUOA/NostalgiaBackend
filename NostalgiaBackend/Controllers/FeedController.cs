@@ -60,13 +60,8 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int feedId, [FromBody, Required] AddFeedUrlRequest request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int feedId)
         {
-            if (string.IsNullOrEmpty(request.Url))
-            {
-                return BadRequest("URL is required");
-            }
-
             var feed = await context.Feeds.FindAsync(feedId);
 
             if (feed == null)
@@ -74,7 +69,7 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("Feed not found");
             }
 
-            var newFeed = await HoverthInput.AddFeed(request.Url);
+            var newFeed = await HoverthInput.AddFeed(feed.Url);
 
             if (newFeed == null)
             {
