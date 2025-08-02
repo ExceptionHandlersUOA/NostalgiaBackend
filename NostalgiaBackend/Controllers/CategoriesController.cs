@@ -10,12 +10,12 @@ namespace NostalgiaBackend.Controllers
     public class CategoriesController(PostContext context) : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<List<Post>>> GetAsync([FromRoute] string categoryName)
+        public async Task<ActionResult<Dictionary<string, List<Post>>>> GetAsync()
         {
             return await context.Posts
-                .Where(p => p.Categories.Contains(categoryName))
-                .Distinct()
-                .ToListAsync();
+                .SelectMany(p => p.Categories, (p, c) => new { Category = c, Post = p })
+                .GroupBy(x => x.Category)
+                .ToDictionaryAsync(g => g.Key, g => g.Select(x => x.Post).ToList());
         }
 
         [HttpGet("{categoryName}")]
