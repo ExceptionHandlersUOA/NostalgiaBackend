@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36203.30 d17.14
+VisualStudioVersion = 17.14.36203.30
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NostalgiaBackend", "NostalgiaBackend\NostalgiaBackend.csproj", "{F52FCD23-0C04-49BB-AE6B-888CE9DAEF76}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeroxArchiver", "FeroxArchiver\FeroxArchiver.csproj", "{1EF36BAC-6F66-4D0F-8711-C5A8C4144759}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoverthArchiver", "HoverthArchiver\HoverthArchiver.csproj", "{62789AD4-5266-486B-B597-81748496A79E}"
 EndProject
@@ -21,10 +19,6 @@ Global
 		{F52FCD23-0C04-49BB-AE6B-888CE9DAEF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F52FCD23-0C04-49BB-AE6B-888CE9DAEF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F52FCD23-0C04-49BB-AE6B-888CE9DAEF76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EF36BAC-6F66-4D0F-8711-C5A8C4144759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EF36BAC-6F66-4D0F-8711-C5A8C4144759}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EF36BAC-6F66-4D0F-8711-C5A8C4144759}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EF36BAC-6F66-4D0F-8711-C5A8C4144759}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62789AD4-5266-486B-B597-81748496A79E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62789AD4-5266-486B-B597-81748496A79E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62789AD4-5266-486B-B597-81748496A79E}.Release|Any CPU.ActiveCfg = Release|Any CPU
