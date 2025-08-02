@@ -50,11 +50,6 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("Feed not found");
             }
 
-            if (feed.Platform != Platform.Custom)
-            {
-                return BadRequest("Feed is not a custom feed!");
-            }
-
             context.Feeds.Remove(feed);
 
             await context.SaveChangesAsync();

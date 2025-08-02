@@ -21,10 +21,10 @@ namespace NostalgiaBackend.Controllers
     }
 
     [ApiController]
-    [Route("api/feed/{feedId}/post")]
+    [Route("api/post/{postId}")]
     public class PostController(PostContext context) : Controller
     {
-        [HttpGet("{postId}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

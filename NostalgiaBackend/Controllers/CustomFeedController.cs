@@ -23,9 +23,9 @@ namespace NostalgiaBackend.Controllers
     public class CustomFeedController(PostContext context) : ControllerBase
     {
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PostAsync([FromBody] AddCustomFeedRequest customFeed)
+        public async Task<ActionResult<int>> PostAsync([FromBody] AddCustomFeedRequest customFeed)
         {
             var feed = new Feed
             {
@@ -40,7 +40,7 @@ namespace NostalgiaBackend.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(feed.FeedId);
         }
 
         [HttpDelete("{feedId}")]
@@ -57,6 +57,7 @@ namespace NostalgiaBackend.Controllers
             }
 
             context.Remove(feed);
+
             await context.SaveChangesAsync();
 
             return Ok();
