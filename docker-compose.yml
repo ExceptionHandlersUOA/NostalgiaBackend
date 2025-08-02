@@ -1,5 +1,11 @@
 services:
-  nostalgia-backend:
-    build: .
+  archivebackend:
+    image: ghcr.io/exceptionhandlersuoa/nostalgia-backend:latest
+    container_name: archivebackend
+    restart: unless-stopped
     ports:
-      - 8000:80
+      - 4273:8080
+x-dockge:
+  urls:
+    - archivebackend.xyz.com
+networks: {}
