@@ -62,6 +62,16 @@ namespace NostalgiaBackend.Controllers
 
             context.Remove(feed);
 
+            foreach (var post in feed.Posts)
+            {
+                context.Posts.Remove(post);
+
+                foreach (var media in post.Media)
+                {
+                    context.Media.Remove(media);
+                }
+            }
+
             await context.SaveChangesAsync();
 
             return Ok();
