@@ -126,7 +126,7 @@ namespace HoverthArchiver
 
                 var post = new Post()
                 {
-                    Description = item.Description ?? string.Empty,
+                    Description = parser.FlattenText(item.Description) ?? string.Empty,
                     Title = item.Title ?? string.Empty,
                     SourceUrl = item.Link ?? string.Empty,
                     PublishedAt = item.PublishingDate ?? DateTime.MinValue,
