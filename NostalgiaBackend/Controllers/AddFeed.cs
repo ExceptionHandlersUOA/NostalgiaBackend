@@ -17,9 +17,9 @@ namespace NostalgiaBackend.Controllers
     public class AddFeedController(PostContext context) : ControllerBase
     {
         [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostAsync([FromBody, Required] AddFeedRequest request)
         {
             if (string.IsNullOrEmpty(request.Url))
@@ -27,8 +27,10 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("URL is required");
             }
 
-
             var feed = await HoverthInput.AddFeed(request.Url);
+
+            context.Feeds.Add(feed);
+
             await context.SaveChangesAsync();
             
             return Ok();

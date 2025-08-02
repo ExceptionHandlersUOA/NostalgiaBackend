@@ -6,12 +6,20 @@ namespace NostalgiaBackend.Controllers
 {
     [ApiController]
     [Route("api/getPost/{id}")]
-    public class GetPost(PostContext _context)
+    public class GetPost(PostContext _context) : ControllerBase
     {
         [HttpGet]
-        public WebPost Get([FromRoute] string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<WebPost>> Get([FromRoute] string id)
         {
-            return new WebPost(_context.Posts.Find(id));
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+                return BadRequest();
+
+            return Ok(new WebPost(post));
         }
     }
 }
