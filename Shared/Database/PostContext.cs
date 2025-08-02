@@ -13,8 +13,7 @@ namespace Shared.Database
 
         public PostContext()
         {
-            var executablePath = AppDomain.CurrentDomain.BaseDirectory;
-            DbPath = Path.Join(executablePath, "posts.db");
+            DbPath = Path.Join(Constants.BaseDirectory, "posts.db");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

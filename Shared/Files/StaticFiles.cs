@@ -2,12 +2,11 @@
 {
     public static class StaticFiles
     {
-        private static string BaseDirectiory => AppDomain.CurrentDomain.BaseDirectory;
         private const string FileHostDirectory = "StaticServedFiles";
 
         private static string GetFileHostDirectory()
         {
-            var directory = Path.Combine(BaseDirectiory, FileHostDirectory);
+            var directory = Path.Combine(Constants.BaseDirectory, FileHostDirectory);
 
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
