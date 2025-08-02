@@ -1,6 +1,6 @@
 using HoverthArchiver;
 using Microsoft.EntityFrameworkCore;
-using NostalgiaBackend;
+using NostalgiaBackend.Services;
 using Shared.Database;
 using System.Text.Json.Serialization;
 
@@ -10,6 +10,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 builder.Services.AddDbContext<PostContext>();
 builder.Services.AddSingleton<HoverthInput>();
+builder.Services.AddHostedService<DbInitializer>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -39,7 +40,6 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<PostContext>();
     context.Database.Migrate();
-    DbInitializer.Initialize(context);
 }
 
 app.UseCors();
