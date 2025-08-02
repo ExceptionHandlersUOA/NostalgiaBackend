@@ -24,37 +24,6 @@ namespace NostalgiaBackend.Controllers
     [Route("api/feed/{feedId}/post")]
     public class PostController(PostContext context) : Controller
     {
-        [HttpPost("custom")]
-        public async Task<ActionResult> PostAsync([FromRoute] int feedId, [FromBody] AddCustomPostRequest customFeed)
-        {
-            var feed = await context.Feeds.FindAsync(feedId);
-
-            if (feed == null)
-            {
-                return BadRequest("Post not found");
-            }
-
-            var post = new Post()
-            {
-                Title = customFeed.Title,
-                Description = customFeed.Description,
-                Body = customFeed.Body,
-                SourceUrl = customFeed.SourceUrl,
-                LastUpdated = customFeed.LastUpdated,
-                PublishedAt = customFeed.PublishedAt,
-                Categories = customFeed.Categories ?? [],
-                Favourited = customFeed.Favourited,
-            };
-            
-            context.Posts.Add(post);
-
-            feed.Posts.Add(post);
-
-            await context.SaveChangesAsync();
-
-            return Ok();
-        }
-
         [HttpGet("{postId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -11,7 +11,7 @@ namespace NostalgiaBackend.Controllers
     }
 
     [ApiController]
-    [Route("api/getPost/{postId}/categories")]
+    [Route("api/post/{postId}/categories")]
     public class PostCategoryController(PostContext context) : ControllerBase
     {
         [HttpPost]
