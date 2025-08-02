@@ -13,9 +13,8 @@ namespace Shared.Database
 
         public PostContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "posts.db");
+            var executablePath = AppDomain.CurrentDomain.BaseDirectory;
+            DbPath = Path.Join(executablePath, "posts.db");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
