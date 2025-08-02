@@ -9,7 +9,9 @@ namespace HoverthArchiver
 {
     public class HoverthInput
     {
-        private static HttpClient httpClient = new HttpClient()
+        private const string _basePath = "/tmp/";
+
+        private static readonly HttpClient _httpClient = new HttpClient()
         {
             Timeout = new TimeSpan(0,5,0) // 5 minute timeout,
         };
@@ -48,9 +50,15 @@ namespace HoverthArchiver
             return await RssAsync(rssUrl, Platform.YouTube);
         }
 
-        private string DownloadFile(string url)
+        private static async Task<string> DownloadFile(string url)
         {
-            string filename = "/tmp/";
+            var remoteFilename = url.Split('/').Last().Split('?').First();
+            var extension = remoteFilename.Split('.').Last();
+            string filename = _basePath + Guid.NewGuid() + extension;
+
+            var stream = await _httpClient.GetStreamAsync(url);
+            var fileStream = new FileStream(filename, FileMode.CreateNew);
+            await stream.CopyToAsync(fileStream);
 
             return filename;
         }
@@ -78,22 +86,20 @@ namespace HoverthArchiver
 
                 foreach (var image in imageUrls)
                 {
-                    // Download
                     var media = new Media()
                     {
                         Type = FileType.Image,
-                        FileName = "",
+                        FileName = await DownloadFile(image),
                     };
                     mediaList.Add(media);
                 }
                 
                 foreach (var video in videoUrls)
                 {
-                    // Download
                     var media = new Media()
                     {
                         Type = FileType.Video,
-                        FileName = "",
+                        FileName = await DownloadFile(video),
                     };
                     mediaList.Add(media);
                 }
