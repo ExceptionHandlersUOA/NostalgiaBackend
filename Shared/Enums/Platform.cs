@@ -8,6 +8,7 @@
         Facebook,
         RSS,
         LinkedIn,
-        Twitter
+        Twitter,
+        Reddit
     }
 }

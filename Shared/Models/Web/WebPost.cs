@@ -1,5 +1,4 @@
-﻿using Shared.Enums;
-using Shared.Models.Database;
+﻿using Shared.Models.Database;
 
 namespace Shared.Models.Web
 {
@@ -12,6 +11,5 @@ namespace Shared.Models.Web
         public DateTime LastUpdated { get; set; } = post.LastUpdated;
         public DateTime PublishedAt { get; set; } = post.PublishedAt;
         public List<WebMedia> Media { get; set; } = [.. post.Media.Select(media => new WebMedia(media))];
-        public Platform Platform { get; set; } = post.Platform;
     }
 }

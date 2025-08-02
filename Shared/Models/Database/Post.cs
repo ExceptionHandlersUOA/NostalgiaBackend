@@ -11,7 +11,6 @@ namespace Shared.Models.Database
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
         public List<Media> Media { get; set; } = [];
-        public Platform Platform { get; set; } = Platform.Unknown;
         public string Category { get; set; } = string.Empty;
         public bool Favourited { get; set; } = false;
     }

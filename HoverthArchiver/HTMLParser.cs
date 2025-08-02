@@ -29,7 +29,7 @@ public class HtmlParser
     }
     public List<string> GetVideos(string html)
     {
-        List<string> videos = new List<string>();
+        List<string> videos = new();
         var document = parser.ParseDocument(html);
         // Console.WriteLine(html);
         var vids = document.QuerySelectorAll("video");
@@ -41,7 +41,7 @@ public class HtmlParser
                 //Console.WriteLine(vidUrl);
                 videos.Add(vidUrl);
             }
-            catch (System.NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 Console.WriteLine(e);
             }
@@ -50,7 +50,7 @@ public class HtmlParser
     }
     public List<string> GetImages(string html)
     {
-        List<string> images = new List<string>();
+        List<string> images = new();
         var document = parser.ParseDocument(html);
         // Console.WriteLine(html);
         var imgs = document.QuerySelectorAll("img");
@@ -64,7 +64,7 @@ public class HtmlParser
                 //Console.WriteLine(imgUrl);
                 images.Add(imgUrl);
             }
-            catch (System.NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 Console.WriteLine(e);
             }

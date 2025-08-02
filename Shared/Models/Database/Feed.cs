@@ -1,3 +1,5 @@
+using Shared.Enums;
+
 namespace Shared.Models.Database;
 
 public class Feed
@@ -8,4 +10,5 @@ public class Feed
     public string ImageUrl { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
     public List<Post> Posts { get; set; } = [];
+    public Platform Platform { get; set; } = Platform.Unknown;
 }

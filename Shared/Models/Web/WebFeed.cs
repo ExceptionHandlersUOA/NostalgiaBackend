@@ -1,3 +1,4 @@
+using Shared.Enums;
 using Shared.Models.Database;
 
 namespace Shared.Models.Web;
@@ -10,4 +11,5 @@ public class WebFeed(Feed feed)
     public string ImageUrl { get; set; } = feed.ImageUrl;
     public string Url { get; set; } = feed.Url;
     public List<WebPost> Posts { get; set; } = [.. feed.Posts.Select(post => new WebPost(post))];
+    public Platform Platform { get; set; } = feed.Platform;
 }

@@ -27,7 +27,6 @@ namespace NostalgiaBackend
                             SourceUrl = "https://example.com/coffee",
                             LastUpdated = DateTime.Now.AddDays(-1),
                             PublishedAt = DateTime.Now.AddDays(-2),
-                            Platform = Platform.Instagram,
                             Media =
                             [
                                 new Media { Type = FileType.Image, FileName = "coffee_morning.jpg" }
@@ -38,14 +37,14 @@ namespace NostalgiaBackend
                             SourceUrl = "https://example.com/adventure",
                             LastUpdated = DateTime.Now.AddDays(-3),
                             PublishedAt = DateTime.Now.AddDays(-4),
-                            Platform = Platform.Twitter,
                             Media =
                             [
                                 new Media { Type = FileType.Image, FileName = "hiking_trail.jpg" },
                                 new Media { Type = FileType.Video, FileName = "nature_walk.mp4" }
                             ]
                         }
-                    ]
+                    ],
+                    Platform = Platform.Instagram,
                 },
                 new() {
                     Title = "Tech Updates",
@@ -58,11 +57,11 @@ namespace NostalgiaBackend
                             Description = "Discussing the latest in software development",
                             SourceUrl = "https://example.com/tech",
                             LastUpdated = DateTime.Now.AddDays(-5),
-                            PublishedAt = DateTime.Now.AddDays(-6),
-                            Platform = Platform.LinkedIn
+                            PublishedAt = DateTime.Now.AddDays(-6)
                         }
-                    ]
-                }
+                    ],
+                    Platform = Platform.LinkedIn
+                },
             };
 
             context.Feeds.AddRange(feeds);
