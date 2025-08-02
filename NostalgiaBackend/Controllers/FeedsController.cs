@@ -6,15 +6,15 @@ using Shared.Models;
 namespace NostalgiaBackend.Controllers
 {
     [ApiController]
-    [Route("api/getFeeds")]
-    public class GetFeeds(PostContext _context) : ControllerBase
+    [Route("api/feeds")]
+    public class FeedsController(PostContext context) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Feed>> GetAsync()
         {
-            var feeds = await _context.Feeds
+            var feeds = await context.Feeds
                 .Include(f => f.Posts)
                     .ThenInclude(p => p.Media)
                 .ToListAsync();

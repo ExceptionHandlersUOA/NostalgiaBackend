@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Shared;
-using CodeHollow.FeedReader;
+﻿using CodeHollow.FeedReader;
 using Shared.Enums;
 using Feed = Shared.Models.Feed;
 using Shared.Models;
@@ -12,10 +10,11 @@ namespace HoverthArchiver
     {
         private const string _basePath = "/tmp/";
 
-        private static readonly HttpClient _httpClient = new HttpClient()
+        private static readonly HttpClient _httpClient = new()
         {
             Timeout = new TimeSpan(0,5,0) // 5 minute timeout,
         };
+
         public static async Task<Feed> AddFeed(string url, Platform platform = Platform.RSS)
         {
             if (url.Contains("reddit.com"))
@@ -30,7 +29,6 @@ namespace HoverthArchiver
 
             return await RssAsync(url, platform);
         }
-        
         
         private static async Task<Feed> Reddit(string url)
         {

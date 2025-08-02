@@ -37,5 +37,12 @@
 
             return await File.ReadAllBytesAsync(filePath);
         }
+
+        public static void DeleteFileOnSystem(string fileName)
+        {
+            var filePath = Path.Combine(FileHostDirectory, fileName);
+
+            File.Delete(filePath);
+        }
     }
 }
