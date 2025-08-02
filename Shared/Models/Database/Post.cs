@@ -12,5 +12,7 @@ namespace Shared.Models.Database
         public DateTime PublishedAt { get; set; }
         public List<Media> Media { get; set; } = [];
         public Platform Platform { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public bool Favourited { get; set; } = false;
     }
 }

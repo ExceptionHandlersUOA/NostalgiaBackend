@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Models.Database;
 
-namespace NostalgiaBackend.Database
+namespace Shared.Database
 {
     public class PostContext : DbContext
     {
-        public DbSet<Post> Blogs { get; set; }
-        public DbSet<Media> Posts { get; set; }
+        public DbSet<Feed> Feeds { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Media> Media { get; set; }
 
         public string DbPath { get; }
 

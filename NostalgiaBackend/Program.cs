@@ -1,5 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using NostalgiaBackend;
 using NostalgiaBackend.Services;
 using Shared;
+using Shared.Database;
+using System.Text.Json.Serialization;
 
 _ = new FeroxArchiver.Load();
 _ = new HoverthArchiver.Load();
@@ -9,12 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 builder.Services.AddHostedService<AppConsole>();
+builder.Services.AddDbContext<PostContext>();
 
 foreach (var assembly in assemblies)
 {
     var sharedTypes = assembly.GetTypes()
         .Where(t => t.IsClass && !t.IsAbstract && t.Namespace != null && (t.Namespace.Contains("FeroxArchiver") || t.Namespace.Contains("HoverthArchiver")));
-    
+
     foreach (var type in sharedTypes)
     {
         if (typeof(IConsoleApplication).IsAssignableFrom(type))
@@ -22,7 +27,9 @@ foreach (var assembly in assemblies)
     }
 }
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddCors(options =>
 {
@@ -44,6 +51,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<PostContext>();
+    context.Database.EnsureCreated();
+    context.Database.Migrate();
+    DbInitializer.Initialize(context);
+}
+
 
 app.UseCors();
 

@@ -2,6 +2,7 @@
 {
     public enum Platform
     {
+        Unknown,
         YouTube,
         Instagram,
         Facebook,

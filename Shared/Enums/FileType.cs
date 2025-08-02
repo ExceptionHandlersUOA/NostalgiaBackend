@@ -2,6 +2,7 @@
 {
     public enum FileType
     {
+        Unknown,
         Audio,
         Image,
         Video,

@@ -1,16 +1,17 @@
 ﻿using Shared.Enums;
+using Shared.Models.Database;
 
 namespace Shared.Models.Web
 {
-    public class WebPost
+    public class WebPost(Post post)
     {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string SourceUrl { get; set; }
-        public DateTime LastUpdated { get; set; }
-        public DateTime PublishedAt { get; set; }
-        public List<WebMedia> Media { get; set; } = [];
-        public Platform Platform { get; set; }
+        public int PostId { get; set; } = post.PostId;
+        public string Title { get; set; } = post.Title;
+        public string Description { get; set; } = post.Description;
+        public string SourceUrl { get; set; } = post.SourceUrl;
+        public DateTime LastUpdated { get; set; } = post.LastUpdated;
+        public DateTime PublishedAt { get; set; } = post.PublishedAt;
+        public List<WebMedia> Media { get; set; } = [.. post.Media.Select(media => new WebMedia(media))];
+        public Platform Platform { get; set; } = post.Platform;
     }
 }
