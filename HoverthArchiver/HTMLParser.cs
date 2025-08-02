@@ -10,9 +10,9 @@ public class HtmlParser
     private IBrowsingContext context = null;
     private IHtmlParser parser = null;
 
-    private static readonly string[] _imageExtensions = [".gif", ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"];
+    private static readonly string[] _imageExtensions = [".gif", ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp", ".svg"];
     private static readonly string[] _videoExtensions = [".mp4", ".mkv", ".mov", ".avi"];
-    private static readonly string[] _documentExtensions = [".pdf", ".doc", ".docx"];
+    private static readonly string[] _documentExtensions = [".pdf", ".doc", ".docx", ".odt", ".xlsx", ".xls", ".ppt", ".pptx", ".ods", ".odp"];
     
     
     public HtmlParser()
