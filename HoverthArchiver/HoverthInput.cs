@@ -48,10 +48,10 @@ namespace HoverthArchiver
 
             var url = args.First();
             Console.WriteLine(url);
-            var rss_url = url + ".rss";
+            var rssUrl = url + ".rss";
             //var rss_url = FeedReader.GetFeedUrlsFromUrl(url).First().Url;
-            Console.WriteLine(rss_url);
-            RSS([rss_url]);
+            Console.WriteLine(rssUrl);
+            RSS([rssUrl]);
         }
 
         void YouTube(string[] args)
@@ -92,14 +92,17 @@ namespace HoverthArchiver
 
                 foreach (var item in feed.Items)
                 {
+                    Shared.Models.Web.WebPost webPost = new Shared.Models.Web.WebPost();
+                    webPost.Title = item.Title;
                     Console.WriteLine(item.Title + " - " + item.Link);
-                    Console.WriteLine(item.Content);
+                    // Console.WriteLine(item.Content);
                     // item.Content is HTML - need to parse, extract images + videos and text
 
-                    parser.FlattenText(item.Content);
+                    Console.WriteLine(parser.FlattenText(item.Content));
+                    Console.WriteLine(string.Join(", ", parser.GetImages(item.Content)));
                 }
 
-                Shared.Models.WebFeedModel webFeed = new Shared.Models.WebFeedModel();
+                Shared.Models.Web.WebFeed webFeed = new Shared.Models.Web.WebFeed();
                 webFeed.Title = feed.Title;
                 webFeed.Description = feed.Description;
                 webFeed.ImageUrl = feed.ImageUrl;

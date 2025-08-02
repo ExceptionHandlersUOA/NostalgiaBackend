@@ -6,8 +6,8 @@ namespace HoverthArchiver;
 
 public class HtmlParser
 {
-    private static IBrowsingContext context = null;
-    private static IHtmlParser parser = null;
+    private IBrowsingContext context = null;
+    private IHtmlParser parser = null;
     
     public HtmlParser()
     {
@@ -19,13 +19,12 @@ public class HtmlParser
         parser = context.GetService<IHtmlParser>();
     }
     
+    /*
+     * 
+     */
     public string FlattenText(string html)
     {
-        // Console.WriteLine("HTML:\n" + html);
-        //Create a parser to specify the document to load (here from our fixed string)
         var document = parser.ParseDocument(html);
-        //Do something with document like the following
-        // Console.WriteLine("Flattened Text: \n" + document.DocumentElement.TextContent);
         return document.DocumentElement.TextContent;
     }
     public List<string> GetVideos(string html)
@@ -37,9 +36,16 @@ public class HtmlParser
         foreach(var vid in vids)
         {
             Console.WriteLine(vid.OuterHtml);
-            var vid_url = vid.Attributes.GetNamedItem("src").Value;
-            Console.WriteLine(vid_url);
-            videos.Add(vid_url);
+            try
+            {
+                var vidUrl = vid.Attributes.GetNamedItem("src").Value;
+                Console.WriteLine(vidUrl);
+                videos.Add(vidUrl);
+            }
+            catch (System.NullReferenceException e)
+            {
+                Console.WriteLine(e);
+            }
         }
         return videos;
     }
@@ -47,14 +53,22 @@ public class HtmlParser
     {
         List<string> images = new List<string>();
         var document = parser.ParseDocument(html);
-        Console.WriteLine(html);
+        // Console.WriteLine(html);
         var imgs = document.QuerySelectorAll("img");
         foreach(var img in imgs)
         {
-            Console.WriteLine(img.OuterHtml);
-            var img_url = img.Attributes.GetNamedItem("src").Value;
-            Console.WriteLine(img_url);
-            images.Add(img_url);
+            try
+            {
+                //Console.WriteLine(img.OuterHtml);
+                var imgUrl = img.Attributes.GetNamedItem("src").Value;
+                imgUrl = imgUrl.Split("?").First();
+                //Console.WriteLine(imgUrl);
+                images.Add(imgUrl);
+            }
+            catch (System.NullReferenceException e)
+            {
+                Console.WriteLine(e);
+            }
         }
         return images;
     }
