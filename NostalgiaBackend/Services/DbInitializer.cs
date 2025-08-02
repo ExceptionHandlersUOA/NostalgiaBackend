@@ -18,6 +18,7 @@ namespace NostalgiaBackend.Services
 
             var feedUrls = new[]
             {
+                "https://www.hoverth.net/index.xml",
                 "https://www.instagram.com/cristiano",
                 "https://www.youtube.com/channel/UCRC6cNamj9tYAO6h_RXd5xA",
                 "https://reddit.com/u/FraudKid"
