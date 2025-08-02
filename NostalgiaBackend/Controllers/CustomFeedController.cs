@@ -42,5 +42,24 @@ namespace NostalgiaBackend.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{feedId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteAsync(int feedId)
+        {
+            var feed = await context.Feeds.FindAsync(feedId);
+
+            if (feed == null || feed.Platform != Platform.Custom)
+            {
+                return BadRequest();
+            }
+
+            context.Remove(feed);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
