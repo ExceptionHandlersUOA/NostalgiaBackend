@@ -27,6 +27,11 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("URL is required");
             }
 
+            if (context.Feeds.Find(request.Url) != null)
+            {
+                return BadRequest("Feed already exists");
+            }
+
             var feed = await hoverth.AddFeed(request.Url);
 
             context.Feeds.Add(feed);
