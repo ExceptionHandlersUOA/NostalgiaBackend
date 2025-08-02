@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="AngleSharp" Version="1.3.0" />
 	  <PackageReference Include="CodeHollow.FeedReader" Version="1.2.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
 			<PrivateAssets>all</PrivateAssets>

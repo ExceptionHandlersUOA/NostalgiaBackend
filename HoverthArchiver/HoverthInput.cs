@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using System.IO.Compression;
+using Shared;
 using CodeHollow.FeedReader;
 
 namespace HoverthArchiver
@@ -21,6 +22,9 @@ namespace HoverthArchiver
                     case "reddit":
                         Reddit(args.Skip(1).ToArray());
                         break;
+                    case "test":
+                        Test(args.Skip(1).ToArray());
+                        break;
                 }
             }
             else
@@ -29,6 +33,12 @@ namespace HoverthArchiver
             }
         }
 
+        void Test(string[] args)
+        {
+            HtmlParser parser = new HtmlParser();
+            parser.GetImages("<p><img src=\"url thing is here yadda\"/>Besides, the fantasy of an unlived life is always preposterously rosy. When you fantasise about the career you might have had, you never stop to consider the horrific chairlift injury that caused both of your legs to be amputated, or the car accident that killed your sister and mother who were on their way to pick you up from the airport. There is no such thing as a perfect speedrun of life. There’s always something to be regretted. I’m sure many of the peers you are comparing yourself to feel envious of aspects of your life. Even those who “have everything” never really have everything, and Instagram is the worst possible tool to use as an objective yardstick.</p>");
+        }
+        
         void Reddit(string[] args)
         {
             if (args.Length < 1)
@@ -72,7 +82,9 @@ namespace HoverthArchiver
 
             try
             {
-                var feed = await FeedReader.ReadAsync(args.First());
+                HtmlParser parser = new HtmlParser();
+                var url = args.First();
+                var feed = await FeedReader.ReadAsync(url);
 
                 Console.WriteLine("Feed Title: " + feed.Title);
                 Console.WriteLine("Feed Description: " + feed.Description);
@@ -81,7 +93,17 @@ namespace HoverthArchiver
                 foreach (var item in feed.Items)
                 {
                     Console.WriteLine(item.Title + " - " + item.Link);
+                    Console.WriteLine(item.Content);
+                    // item.Content is HTML - need to parse, extract images + videos and text
+
+                    parser.FlattenText(item.Content);
                 }
+
+                Shared.Models.WebFeedModel webFeed = new Shared.Models.WebFeedModel();
+                webFeed.Title = feed.Title;
+                webFeed.Description = feed.Description;
+                webFeed.ImageUrl = feed.ImageUrl;
+                webFeed.Url = url;
                 // return 200
             }
             catch (System.Net.Http.HttpRequestException e)
