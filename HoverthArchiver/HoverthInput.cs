@@ -56,7 +56,7 @@ namespace HoverthArchiver
             return await RssAsync(rssUrl, Platform.YouTube);
         }
 
-        private async Task<string> DownloadFile(string url)
+        public async Task<string> DownloadFile(string url)
         {
             var remoteFilename = url.Split('/').Last().Split('?').First();
             var extension = remoteFilename.Split('.').Last();
