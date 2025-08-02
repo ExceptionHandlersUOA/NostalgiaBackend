@@ -92,8 +92,6 @@ namespace HoverthArchiver
 
                 foreach (var item in feed.Items)
                 {
-                    Shared.Models.Web.WebPost webPost = new Shared.Models.Web.WebPost();
-                    webPost.Title = item.Title;
                     Console.WriteLine(item.Title + " - " + item.Link);
                     // Console.WriteLine(item.Content);
                     // item.Content is HTML - need to parse, extract images + videos and text
@@ -101,12 +99,6 @@ namespace HoverthArchiver
                     Console.WriteLine(parser.FlattenText(item.Content));
                     Console.WriteLine(string.Join(", ", parser.GetImages(item.Content)));
                 }
-
-                Shared.Models.Web.WebFeed webFeed = new Shared.Models.Web.WebFeed();
-                webFeed.Title = feed.Title;
-                webFeed.Description = feed.Description;
-                webFeed.ImageUrl = feed.ImageUrl;
-                webFeed.Url = url;
                 // return 200
             }
             catch (System.Net.Http.HttpRequestException e)
