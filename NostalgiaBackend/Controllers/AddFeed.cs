@@ -11,7 +11,7 @@ namespace NostalgiaBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] string url)
         {
-            var feed = await HoverthInput.RssAsync(url);
+            var feed = await HoverthInput.AddFeed(url);
             context.Add(feed);
             return new OkResult();
         }
