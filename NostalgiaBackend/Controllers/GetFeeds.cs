@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Database;
-using Shared.Models.Web;
+using Shared.Models;
 
 namespace NostalgiaBackend.Controllers
 {
@@ -12,14 +12,14 @@ namespace NostalgiaBackend.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<WebFeed>>> GetAsync()
+        public async Task<ActionResult<Feed>> GetAsync()
         {
             var feeds = await _context.Feeds
                 .Include(f => f.Posts)
                     .ThenInclude(p => p.Media)
                 .ToListAsync();
 
-            return Ok(feeds.Select(f => new WebFeed(f)).ToList());
+            return Ok(feeds);
         }
     }
 }

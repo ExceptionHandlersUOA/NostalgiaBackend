@@ -1,4 +1,4 @@
-﻿namespace Shared.Models.Database
+﻿namespace Shared.Models
 {
     public class Post
     {
@@ -10,7 +10,7 @@
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
         public List<Media> Media { get; set; } = [];
-        public string Category { get; set; } = string.Empty;
+        public List<string> Categories { get; set; } = [];
         public bool Favourited { get; set; } = false;
     }
 }

@@ -2,8 +2,9 @@
 using Shared;
 using CodeHollow.FeedReader;
 using Shared.Enums;
-using Shared.Models.Database;
-using Feed = Shared.Models.Database.Feed;
+using Feed = Shared.Models.Feed;
+using Shared.Models;
+using Shared.Files;
 
 namespace HoverthArchiver
 {
@@ -57,8 +58,8 @@ namespace HoverthArchiver
             string filename = _basePath + Guid.NewGuid() + extension;
 
             var stream = await _httpClient.GetStreamAsync(url);
-            var fileStream = new FileStream(filename, FileMode.CreateNew);
-            await stream.CopyToAsync(fileStream);
+
+            await StaticFiles.AddFileToSystem(stream, extension);
 
             return filename;
         }
@@ -110,7 +111,7 @@ namespace HoverthArchiver
                     Title = item.Title ?? string.Empty,
                     SourceUrl = item.Link ?? string.Empty,
                     PublishedAt = item.PublishingDate ?? DateTime.MinValue,
-                    Category = string.Empty,
+                    Categories = [],
                     Favourited = false,
                     LastUpdated = item.PublishingDate ?? DateTime.MinValue,
                     Media = mediaList,

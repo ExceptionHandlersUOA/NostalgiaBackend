@@ -1,6 +1,6 @@
 ﻿using Shared.Database;
-using Shared.Models.Database;
 using Shared.Enums;
+using Shared.Models;
 
 namespace NostalgiaBackend
 {

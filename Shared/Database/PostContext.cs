@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Models.Database;
+using Shared.Models;
 
 namespace Shared.Database
 {

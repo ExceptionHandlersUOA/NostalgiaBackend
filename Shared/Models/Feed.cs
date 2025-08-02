@@ -1,6 +1,6 @@
 using Shared.Enums;
 
-namespace Shared.Models.Database;
+namespace Shared.Models;
 
 public class Feed
 {

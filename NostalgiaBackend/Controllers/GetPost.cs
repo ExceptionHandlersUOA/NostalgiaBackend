@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Database;
-using Shared.Models.Web;
+using Shared.Models;
 
 namespace NostalgiaBackend.Controllers
 {
@@ -13,7 +13,7 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<WebPost>> GetAsync([FromRoute] int id)
+        public async Task<ActionResult<Post>> GetAsync([FromRoute] int id)
         {
             var post = await _context.Posts
                 .Include(p => p.Media)
@@ -22,7 +22,7 @@ namespace NostalgiaBackend.Controllers
             if (post == null)
                 return BadRequest();
 
-            return Ok(new WebPost(post));
+            return Ok(post);
         }
     }
 }
