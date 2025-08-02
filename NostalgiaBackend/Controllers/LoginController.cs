@@ -14,11 +14,13 @@ namespace NostalgiaBackend.Controllers
     public class LoginController : Controller
     {
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest(new { message = "Username and password are required" });
+                return BadRequest();
             }
 
             var token = await ValidateCredentials(request.Username, request.Password);
@@ -26,15 +28,14 @@ namespace NostalgiaBackend.Controllers
             {
                 return Ok(new
                 {
-                    message = "Login successful",
-                    token = token
+                    token
                 });
             }
 
-            return Unauthorized(new { message = "Invalid credentials" });
+            return Unauthorized();
         }
 
-        private static async Task<string?> ValidateCredentials(string username, string password)
+        private static async Task<string> ValidateCredentials(string username, string password)
         {
             var authentikServer = Environment.GetEnvironmentVariable("AUTHENTIK_SERVER");
             var clientId = Environment.GetEnvironmentVariable("AUTHENTIK_CLIENT_ID");
