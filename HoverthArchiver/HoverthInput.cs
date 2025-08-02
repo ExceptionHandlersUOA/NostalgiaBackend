@@ -122,10 +122,11 @@ namespace HoverthArchiver
                     PublishedAt = item.PublishingDate ?? DateTime.MinValue,
                     Categories = [],
                     Favourited = false,
-                    LastUpdated = item.PublishingDate ?? DateTime.MinValue,
+                    LastUpdated = DateTime.Now,
                     Media = mediaList,
                     Body = textContent,
                 };
+
                 postList.Add(post);
             }
 
