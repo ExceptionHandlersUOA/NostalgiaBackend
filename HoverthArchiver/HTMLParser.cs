@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using AngleSharp;
 using AngleSharp.Html.Parser;
 

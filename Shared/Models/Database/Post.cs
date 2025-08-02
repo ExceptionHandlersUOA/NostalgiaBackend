@@ -1,6 +1,4 @@
-﻿using Shared.Enums;
-
-namespace Shared.Models.Database
+﻿namespace Shared.Models.Database
 {
     public class Post
     {

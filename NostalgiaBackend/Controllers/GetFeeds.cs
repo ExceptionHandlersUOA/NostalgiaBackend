@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using Shared.Database;
 using Shared.Models.Web;
 
 namespace NostalgiaBackend.Controllers
 {
-    [Controller]
+    [ApiController]
     [Route("api/getFeeds")]
     public class GetFeeds(PostContext _context)
     {

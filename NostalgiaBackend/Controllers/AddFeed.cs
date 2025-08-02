@@ -1,19 +1,36 @@
 ﻿using HoverthArchiver;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Database;
+using System.ComponentModel.DataAnnotations;
 
 namespace NostalgiaBackend.Controllers
 {
-    [Controller]
+    public class AddFeedRequest
+    {
+        [Required]
+        [Url]
+        public string Url { get; set; } = string.Empty;
+    }
+
+    [ApiController]
     [Route("api/addFeed")]
-    public class AddFeed(PostContext context)
+    public class AddFeedController(PostContext context) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] string url)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PostAsync([FromBody, Required] AddFeedRequest request)
         {
-            var feed = await HoverthInput.RssAsync(url);
+            if (string.IsNullOrEmpty(request.Url))
+            {
+                return BadRequest("URL is required");
+            }
+
+            var feed = await HoverthInput.RssAsync(request.Url);
             context.Add(feed);
-            return new OkResult();
+            await context.SaveChangesAsync();
+            
+            return Ok();
         }
     }
 }
