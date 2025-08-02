@@ -3,11 +3,9 @@ using HoverthArchiver;
 
 namespace NostalgiaBackend
 {
-    public class AppConsole(ILogger<AppConsole> logger) : IHostedService
+    public class AppConsole(ILogger<AppConsole> logger, FeroxInput _feroxConsole, HoverthInput _hoverthConsole) : IHostedService
     {
         private readonly ILogger<AppConsole> _logger = logger;
-        private readonly FeroxInput _feroxConsole = new();
-        private readonly HoverthInput _hoverthConsole = new();
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
