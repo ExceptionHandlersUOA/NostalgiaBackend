@@ -81,6 +81,7 @@ namespace HoverthArchiver
                 var textContent = parser.FlattenText(item.Content);
                 var imageUrls = parser.GetImages(item.Content);
                 var videoUrls = parser.GetVideos(item.Content);
+                var documentUrls =  parser.GetDocuments(item.Content);
 
                 List<Media> mediaList = new List<Media>();
 
@@ -103,7 +104,17 @@ namespace HoverthArchiver
                     };
                     mediaList.Add(media);
                 }
-                
+
+                foreach (var document in documentUrls)
+                {
+                    var media = new Media()
+                    {
+                        Type = FileType.Document,
+                        FileName = await DownloadFile(document),
+                    };
+                    mediaList.Add(media);
+                }
+                             
                 var post = new Post()
                 {
                     Description = item.Description ?? string.Empty,
