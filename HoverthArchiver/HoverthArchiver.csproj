@@ -9,4 +9,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CodeHollow.FeedReader" Version="1.2.6" />
+	</ItemGroup>
 </Project>
