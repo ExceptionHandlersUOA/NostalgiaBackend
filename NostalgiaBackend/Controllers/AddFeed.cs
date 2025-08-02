@@ -18,6 +18,7 @@ namespace NostalgiaBackend.Controllers
     {
         [HttpPost]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> PostAsync([FromBody, Required] AddFeedRequest request)
         {
@@ -26,8 +27,8 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("URL is required");
             }
 
-            var feed = await HoverthInput.RssAsync(request.Url);
-            context.Add(feed);
+
+            var feed = await HoverthInput.AddFeed(request.Url);
             await context.SaveChangesAsync();
             
             return Ok();
