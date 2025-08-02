@@ -3,10 +3,12 @@ using Shared.Database;
 
 namespace NostalgiaBackend.Services
 {
-    public class DbInitializer(IServiceProvider serviceProvider, HoverthInput hoverth) : IHostedService
+    public class DbInitializer(IServiceProvider serviceProvider, ILogger<DbInitializer> logger, HoverthInput hoverth) : IHostedService
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            logger.LogInformation("Starting database initialization...");
+
             using var scope = serviceProvider.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<PostContext>();
@@ -18,6 +20,7 @@ namespace NostalgiaBackend.Services
 
             var feedUrls = new[]
             {
+                "https://github.com/FeroxFoxxo",
                 "https://www.hoverth.net/index.xml",
                 "https://www.instagram.com/cristiano",
                 "https://www.youtube.com/channel/UCRC6cNamj9tYAO6h_RXd5xA",

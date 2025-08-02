@@ -1,5 +1,6 @@
 ﻿using HoverthArchiver;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Database;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,7 +28,7 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("URL is required");
             }
 
-            if (context.Feeds.Find(request.Url) != null)
+            if (context.Feeds.FirstOrDefault(f => f.Url == request.Url) != null)
             {
                 return BadRequest("Feed already exists");
             }
@@ -47,7 +48,10 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAsync([FromRoute] int feedId)
         {
-            var feed = await context.Feeds.FindAsync(feedId);
+            var feed = await context.Feeds
+                .Include(f => f.Posts)
+                .ThenInclude(p => p.Media)
+                .FirstOrDefaultAsync(f => f.FeedId == feedId);
 
             if (feed == null)
             {
@@ -67,7 +71,10 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateAsync([FromRoute] int feedId)
         {
-            var feed = await context.Feeds.FindAsync(feedId);
+            var feed = await context.Feeds
+                .Include(f => f.Posts)
+                .ThenInclude(p => p.Media)
+                .FirstOrDefaultAsync(f => f.FeedId == feedId);
 
             if (feed == null)
             {

@@ -4,13 +4,14 @@ using Shared.Enums;
 using Feed = Shared.Models.Feed;
 using Shared.Models;
 using Shared.Files;
+using FeroxArchiver;
 
 namespace HoverthArchiver
 {
-    public class HoverthInput(ILogger<HoverthInput> logger)
+    public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox)
     {
         private const string _basePath = "/tmp/";
-        private readonly ILogger<HoverthInput> _logger = logger;
+        private readonly ILogger<HoverthInput> logger = logger;
 
         private readonly HttpClient _httpClient = new()
         {
@@ -29,14 +30,19 @@ namespace HoverthArchiver
                 return await YouTube(url);
             }
 
+            if (url.Contains("github.com"))
+            {
+                return await ferox.GitHub(url);
+            }
+
             return await RssAsync(url, platform);
         }
 
         private async Task<Feed> Reddit(string url)
         {
-            _logger.LogInformation("Processing Reddit URL: {Url}", url);
+            logger.LogInformation("Processing Reddit URL: {Url}", url);
             var rssUrl = url + ".rss";
-            _logger.LogInformation("Generated RSS URL: {RssUrl}", rssUrl);
+            logger.LogInformation("Generated RSS URL: {RssUrl}", rssUrl);
             return await RssAsync(rssUrl, Platform.Reddit);
         }
 
@@ -68,15 +74,15 @@ namespace HoverthArchiver
             HtmlParser parser = new();
             var feed = await FeedReader.ReadAsync(url);
 
-            _logger.LogInformation("Feed Title: {Title}", feed.Title);
-            _logger.LogInformation("Feed Description: {Description}", feed.Description);
-            _logger.LogInformation("Feed Image: {ImageUrl}", feed.ImageUrl);
+            logger.LogInformation("Feed Title: {Title}", feed.Title);
+            logger.LogInformation("Feed Description: {Description}", feed.Description);
+            logger.LogInformation("Feed Image: {ImageUrl}", feed.ImageUrl);
 
             List<Post> postList = [];
 
             foreach (var item in feed.Items)
             {
-                _logger.LogInformation("Processing item: {Title} - {Link}", item.Title, item.Link);
+                logger.LogInformation("Processing item: {Title} - {Link}", item.Title, item.Link);
 
                 var textContent = parser.FlattenText(item.Content);
                 var imageUrls = parser.GetImages(item.Content);

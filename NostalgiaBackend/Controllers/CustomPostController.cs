@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Database;
 using Shared.Enums;
 using Shared.Models;
@@ -32,7 +33,10 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<int>> PostAsync([FromRoute] int feedId, [FromBody] AddCustomPostRequest customPost)
         {
-            var feed = await context.Feeds.FindAsync(feedId);
+            var feed = await context.Feeds
+                .Include(f => f.Posts)
+                .ThenInclude(p => p.Media)
+                .FirstOrDefaultAsync(f => f.FeedId == feedId);
 
             if (feed == null || feed.Platform != Platform.Custom)
             {
@@ -74,7 +78,10 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAsync([FromRoute] int feedId, [FromRoute] int postId)
         {
-            var feed = await context.Feeds.FindAsync(feedId);
+            var feed = await context.Feeds
+                .Include(f => f.Posts)
+                .ThenInclude(p => p.Media)
+                .FirstOrDefaultAsync(f => f.FeedId == feedId);
 
             if (feed == null || feed.Platform != Platform.Custom)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Database;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,7 +21,9 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> PostAsync([FromRoute] int postId, [FromBody, Required] CategoryRequest request)
         {
-            var post = await context.Posts.FindAsync(postId);
+            var post = await context.Posts
+                .Include(p => p.Media)
+                .FirstOrDefaultAsync(f => f.PostId == postId);
 
             if (post == null)
             {
@@ -45,7 +48,9 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAsync([FromRoute] int postId, [FromBody, Required] CategoryRequest request)
         {
-            var post = await context.Posts.FindAsync(postId);
+            var post = await context.Posts
+                .Include(p => p.Media)
+                .FirstOrDefaultAsync(f => f.PostId == postId);
 
             if (post == null)
             {

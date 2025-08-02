@@ -1,3 +1,4 @@
+using FeroxArchiver;
 using HoverthArchiver;
 using Microsoft.EntityFrameworkCore;
 using NostalgiaBackend.Services;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 builder.Services.AddDbContext<PostContext>();
+builder.Services.AddSingleton<FeroxInput>();
 builder.Services.AddSingleton<HoverthInput>();
 builder.Services.AddHostedService<DbInitializer>();
 

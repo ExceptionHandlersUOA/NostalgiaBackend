@@ -5,11 +5,9 @@
         Unknown,
         YouTube,
         Instagram,
-        Facebook,
         RSS,
-        LinkedIn,
-        Twitter,
         Reddit,
+        GitHub,
         Custom
     }
 }
