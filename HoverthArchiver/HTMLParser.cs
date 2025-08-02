@@ -14,7 +14,6 @@ public class HtmlParser
     private static readonly string[] _videoExtensions = [".mp4", ".mkv", ".mov", ".avi"];
     private static readonly string[] _documentExtensions = [".pdf", ".doc", ".docx", ".odt", ".xlsx", ".xls", ".ppt", ".pptx", ".ods", ".odp"];
     
-    
     public HtmlParser()
     {
         //Use the default configuration for AngleSharp
