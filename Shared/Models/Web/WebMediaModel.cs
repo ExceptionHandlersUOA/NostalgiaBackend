@@ -2,9 +2,9 @@
 
 namespace Shared.Models
 {
-    public class MediaModel
+    public class WebMediaModel
     {
         public FileType Type { get; set; }
-        public string FileName { get; set; }
+        public string FileUrl { get; set; }
     }
 }

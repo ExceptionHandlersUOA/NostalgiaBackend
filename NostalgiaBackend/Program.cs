@@ -6,9 +6,9 @@ _ = new HoverthArchiver.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHostedService<AppConsole>();
-
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+builder.Services.AddHostedService<AppConsole>();
 
 foreach (var assembly in assemblies)
 {
@@ -33,8 +33,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization(); 
 

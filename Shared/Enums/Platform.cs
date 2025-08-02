@@ -5,6 +5,8 @@
         YouTube,
         Instagram,
         Facebook,
-        RSS
+        RSS,
+        LinkedIn,
+        Twitter
     }
 }

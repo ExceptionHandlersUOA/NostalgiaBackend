@@ -3,6 +3,8 @@
     public enum FileType
     {
         Audio,
+        Image,
         Video,
+        Document
     }
 }
