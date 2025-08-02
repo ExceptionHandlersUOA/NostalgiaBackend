@@ -35,6 +35,11 @@ namespace HoverthArchiver
                 return await ferox.GitHub(url);
             }
 
+            if (url.Contains("instagram.com"))
+            {
+                return await Instagram.AddInstagram(url);
+            }
+
             return await RssAsync(url, platform);
         }
 
