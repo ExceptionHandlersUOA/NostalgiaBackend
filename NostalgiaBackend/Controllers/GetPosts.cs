@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared;
-using Shared.Models;
+using Shared.Models.Web;
 
 namespace NostalgiaBackend.Controllers
 {
@@ -9,7 +9,7 @@ namespace NostalgiaBackend.Controllers
     public class GetPosts
     {
         [HttpGet]
-        public List<WebPostModel> Get()
+        public List<WebPost> Get()
         {
             return SampleData.GetSamplePosts();
         }

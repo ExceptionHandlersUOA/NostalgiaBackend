@@ -1,7 +1,7 @@
 ﻿using FeroxArchiver;
 using HoverthArchiver;
 
-namespace NostalgiaBackend
+namespace NostalgiaBackend.Services
 {
     public class AppConsole(ILogger<AppConsole> logger, FeroxInput feroxConsole, HoverthInput hoverthConsole, IHostApplicationLifetime hostApplicationLifetime) : IHostedService
     {

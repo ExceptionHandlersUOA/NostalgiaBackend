@@ -1,10 +1,11 @@
-namespace Shared.Models;
+namespace Shared.Models.Database;
 
-public class WebFeedModel
+public class Feed
 {
+    public int FeedId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string ImageUrl { get; set; }
     public string Url { get; set; }
-    public List<WebPostModel> posts { get; set; } = [];
+    public List<Post> Posts { get; set; } = [];
 }
