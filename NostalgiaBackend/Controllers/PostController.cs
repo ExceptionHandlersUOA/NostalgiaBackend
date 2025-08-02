@@ -42,7 +42,7 @@ namespace NostalgiaBackend.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok(post);
+            return Ok();
         }
 
         [HttpPost("unfavourite")]
@@ -62,7 +62,7 @@ namespace NostalgiaBackend.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok(post);
+            return Ok();
         }
     }
 }
