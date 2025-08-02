@@ -31,15 +31,14 @@ public class HtmlParser
     {
         List<string> videos = new List<string>();
         var document = parser.ParseDocument(html);
-        Console.WriteLine(html);
+        // Console.WriteLine(html);
         var vids = document.QuerySelectorAll("video");
         foreach(var vid in vids)
         {
-            Console.WriteLine(vid.OuterHtml);
             try
             {
-                var vidUrl = vid.Attributes.GetNamedItem("src").Value;
-                Console.WriteLine(vidUrl);
+                var vidUrl = vid.Attributes.GetNamedItem("src")?.Value;
+                //Console.WriteLine(vidUrl);
                 videos.Add(vidUrl);
             }
             catch (System.NullReferenceException e)
@@ -60,8 +59,8 @@ public class HtmlParser
             try
             {
                 //Console.WriteLine(img.OuterHtml);
-                var imgUrl = img.Attributes.GetNamedItem("src").Value;
-                imgUrl = imgUrl.Split("?").First();
+                var imgUrl = img.Attributes.GetNamedItem("src")?.Value;
+                imgUrl = imgUrl?.Split("?").First();
                 //Console.WriteLine(imgUrl);
                 images.Add(imgUrl);
             }

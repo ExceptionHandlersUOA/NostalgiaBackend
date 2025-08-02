@@ -17,7 +17,7 @@ namespace HoverthArchiver
                         YouTube(args.Skip(1).ToArray());
                         break;
                     case "rss":
-                        RSS(args.Skip(1).ToArray());
+                        Rss(args.Skip(1).ToArray());
                         break;
                     case "reddit":
                         Reddit(args.Skip(1).ToArray());
@@ -51,7 +51,7 @@ namespace HoverthArchiver
             var rssUrl = url + ".rss";
             //var rss_url = FeedReader.GetFeedUrlsFromUrl(url).First().Url;
             Console.WriteLine(rssUrl);
-            RSS([rssUrl]);
+            Rss([rssUrl]);
         }
 
         void YouTube(string[] args)
@@ -66,14 +66,14 @@ namespace HoverthArchiver
 
             var url = args.First();
             // Console.WriteLine(url);
-            string channel_id = url.Split('/').Last().Split('?').First();
+            string channelId = url.Split('/').Last().Split('?').First();
             // Console.WriteLine(channel_id);
-            var rss_url = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channel_id;
+            var rssUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
             // Console.WriteLine(rss_url);
-            RSS([rss_url]); // return
+            Rss([rssUrl]); // return
         }
 
-        async void RSS(string[] args)
+        async void Rss(string[] args)
         {
             if (args.Length < 1)
             {
