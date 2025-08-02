@@ -30,7 +30,7 @@ namespace NostalgiaBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PostAsync([FromRoute] int feedId, [FromBody] AddCustomPostRequest customPost)
+        public async Task<ActionResult<int>> PostAsync([FromRoute] int feedId, [FromBody] AddCustomPostRequest customPost)
         {
             var feed = await context.Feeds.FindAsync(feedId);
 
@@ -65,7 +65,7 @@ namespace NostalgiaBackend.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(post.PostId);
         }
 
         [HttpDelete("{postId}")]
