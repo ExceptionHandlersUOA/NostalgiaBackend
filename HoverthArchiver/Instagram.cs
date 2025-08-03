@@ -62,7 +62,7 @@ public static class Instagram
                 {
                     try
                     {
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000);
                         List<Media> mediaItems = [];
 
                         try
