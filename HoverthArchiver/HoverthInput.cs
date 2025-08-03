@@ -205,15 +205,33 @@ namespace HoverthArchiver
             if (!_setup)
             {
                 _setup = true;
-                logger.LogInformation("Downloading youtubedl");
-                await Utils.DownloadYtDlp(Constants.BaseDirectory);
+                
+                var ytdlpPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe");
+                var ffmpegPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe");
+                
+                if (!File.Exists(ytdlpPath))
+                {
+                    logger.LogInformation("Downloading youtubedl");
+                    await Utils.DownloadYtDlp(Constants.BaseDirectory);
+                }
+                else
+                {
+                    logger.LogInformation("yt-dlp already exists, skipping download");
+                }
 
-                _youtubeDL.YoutubeDLPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe");
+                _youtubeDL.YoutubeDLPath = ytdlpPath;
 
-                logger.LogInformation("Downloading ffmpeg");
-                await Utils.DownloadFFmpeg(Constants.BaseDirectory);
+                if (!File.Exists(ffmpegPath))
+                {
+                    logger.LogInformation("Downloading ffmpeg");
+                    await Utils.DownloadFFmpeg(Constants.BaseDirectory);
+                }
+                else
+                {
+                    logger.LogInformation("ffmpeg already exists, skipping download");
+                }
 
-                _youtubeDL.FFmpegPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe");
+                _youtubeDL.FFmpegPath = ffmpegPath;
             }
         }
     }
