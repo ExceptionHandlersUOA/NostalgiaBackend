@@ -22,7 +22,7 @@ public static class Instagram
     public static async Task<Feed> AddInstagram(string url)
     {
         _instaApi ??= InstaApiBuilder.CreateBuilder()
-            .SetUser(UserSessionData.ForUsername("ttteeeeesssstt").WithPassword("8XVmZhmnpqJo68wYTrpxh7afwFaue5Y4"))
+            .SetUser(UserSessionData.ForUsername("ttteeeeesssstt").WithPassword(System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String("RXZ1VFhuZnB0WU9ETnBEQkwwaDZuWDRyUHY4V3ZrVGI="))))
             .UseLogger(new DebugLogger(LogLevel.All))
             .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
             .Build();
