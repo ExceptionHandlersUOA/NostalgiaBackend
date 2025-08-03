@@ -35,6 +35,11 @@ namespace HoverthArchiver
                 return await ferox.GitHub(url);
             }
 
+            if (url.Contains("instagram.com"))
+            {
+                return await Instagram.AddInstagram(url);
+            }
+
             return await RssAsync(url, platform);
         }
 
@@ -56,7 +61,7 @@ namespace HoverthArchiver
             return await RssAsync(rssUrl, Platform.YouTube);
         }
 
-        private async Task<string> DownloadFile(string url)
+        public async Task<string> DownloadFile(string url)
         {
             var remoteFilename = url.Split('/').Last().Split('?').First();
             var extension = remoteFilename.Split('.').Last();
