@@ -128,7 +128,13 @@ public static class Instagram
                     {
                         imageUrl = await h.DownloadFile(user.ProfilePicUrl);
                     }
+                }
+                catch (Exception) { }
 
+
+
+                try
+                {
                     if (fullUser != null)
                     {
                         description = fullUser.UserDetail.Biography ?? string.Empty;
