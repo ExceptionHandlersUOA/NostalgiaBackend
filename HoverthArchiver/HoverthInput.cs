@@ -80,7 +80,8 @@ namespace HoverthArchiver
                         logger.LogInformation("Downloading thumbnail: {thumbnail}", thumbnailUrl);
 
                         var stream2 = await _httpClient.GetStreamAsync(thumbnailUrl);
-                        var thumbnail = await StaticFiles.AddFileToSystem(stream2, "jpg");
+                        var thumbnailExtension = thumbnailUrl.Split('/').Last().Split('?').First().Split('.').Last();
+                        var thumbnail = await StaticFiles.AddFileToSystem(stream2, thumbnailExtension);
 
                         var media = new Media()
                         {
