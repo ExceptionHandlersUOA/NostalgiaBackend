@@ -114,15 +114,19 @@ public static class Instagram
                     catch (Exception) { }
                 }
 
-                if (user.ProfilePicUrl != null)
+                try
                 {
-                    imageUrl = await h.DownloadFile(user.ProfilePicUrl);
-                }
+                    if (user.ProfilePicUrl != null)
+                    {
+                        imageUrl = await h.DownloadFile(user.ProfilePicUrl);
+                    }
 
-                if (fullUser != null)
-                {
-                    description = fullUser.UserDetail.Biography ?? string.Empty;
+                    if (fullUser != null)
+                    {
+                        description = fullUser.UserDetail.Biography ?? string.Empty;
+                    }
                 }
+                catch (Exception) { }
             }
             else
             {
