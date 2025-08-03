@@ -237,6 +237,9 @@ namespace HoverthArchiver
 
                 _youtubeDL.YoutubeDLPath = ytdlpPath;
 
+                if (!OperatingSystem.IsWindows())
+                    File.SetUnixFileMode(ytdlpPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite);
+
                 if (!File.Exists(ffmpegPath))
                 {
                     logger.LogInformation("Downloading ffmpeg");
@@ -246,6 +249,9 @@ namespace HoverthArchiver
                 {
                     logger.LogInformation("ffmpeg already exists, skipping download");
                 }
+
+                if (!OperatingSystem.IsWindows())
+                    File.SetUnixFileMode(ffmpegPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite);
 
                 _youtubeDL.FFmpegPath = ffmpegPath;
             }
