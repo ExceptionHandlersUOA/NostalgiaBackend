@@ -69,7 +69,9 @@ public static class Instagram
                         {
                             foreach (var item in media.Images)
                             {
-                                if (item.Uri == null) continue;
+                                try
+                                {
+                                    if (item.Uri == null) continue;
                                 var filename = await h.DownloadFile(item.Uri);
                                 var mediaItem = new Media()
                                 {
@@ -77,6 +79,8 @@ public static class Instagram
                                     FileName = filename,
                                 };
                                 mediaItems.Add(mediaItem);
+                                }
+                                catch (Exception) { }
                             }
                         }
                         catch (Exception) { }
@@ -86,7 +90,9 @@ public static class Instagram
                         {
                             foreach (var item in media.Videos)
                             {
-                                if (item.Uri == null) continue;
+                                try
+                                {
+                                    if (item.Uri == null) continue;
                                 var filename = await h.DownloadFile(item.Uri);
                                 var mediaItem = new Media()
                                 {
@@ -94,6 +100,8 @@ public static class Instagram
                                     FileName = filename,
                                 };
                                 mediaItems.Add(mediaItem);
+                                }
+                                catch (Exception) { }
                             }
 
                         }
