@@ -7,6 +7,7 @@ using Shared.Enums;
 using Shared.Files;
 using Shared.Models;
 using System;
+using System.Diagnostics;
 using System.Text;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Options;
@@ -18,10 +19,7 @@ namespace HoverthArchiver
     {
         private readonly ILogger<HoverthInput> logger = logger;
 
-        private readonly YoutubeDL _youtubeDL = new() { 
-            OutputFolder = Constants.BaseDirectory,
-            RestrictFilenames = true,
-        };
+        private YoutubeDL _youtubeDL;
 
         private bool _setup = false;
 
@@ -254,6 +252,15 @@ namespace HoverthArchiver
                     File.SetUnixFileMode(ffmpegPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite);
 
                 _youtubeDL.FFmpegPath = ffmpegPath;
+
+                _youtubeDL = new YoutubeDL()
+                {
+                    OutputFolder = Constants.BaseDirectory,
+                    RestrictFilenames = true,
+                    FFmpegPath = ffmpegPath,
+                    YoutubeDLPath = ytdlpPath,
+                    IgnoreDownloadErrors = false,
+                };
             }
         }
     }

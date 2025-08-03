@@ -4,6 +4,15 @@
 FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
+
+USER root
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    ln -sf python3 /usr/bin/python && \
+    python --version && \
+    pip3 install --upgrade pip
+USER $APP_UID
+
 EXPOSE 8080
 EXPOSE 8081
 
