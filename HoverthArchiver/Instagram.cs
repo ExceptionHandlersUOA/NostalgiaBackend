@@ -21,8 +21,15 @@ public static class Instagram
 
     public static async Task<Feed> AddInstagram(string url)
     {
+        //var credname = "ttteeeeesssstt";
+        //var cred = System.Text.Encoding.UTF8.GetString(
+        //    System.Convert.FromBase64String("RXZ1VFhuZnB0WU9ETnBEQkwwaDZuWDRyUHY4V3ZrVGI="));
+
+        var credname = System.Environment.GetEnvironmentVariable("INSTAGRAM_USERNAME");
+        var cred = System.Environment.GetEnvironmentVariable("INSTAGRAM_PASSWORD");
+        
         _instaApi ??= InstaApiBuilder.CreateBuilder()
-            .SetUser(UserSessionData.ForUsername("ttteeeeesssstt").WithPassword(System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String("RXZ1VFhuZnB0WU9ETnBEQkwwaDZuWDRyUHY4V3ZrVGI="))))
+            .SetUser(UserSessionData.ForUsername(credname).WithPassword(cred))
             .UseLogger(new DebugLogger(LogLevel.All))
             .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
             .Build();
@@ -78,6 +85,7 @@ public static class Instagram
                     mediaItems.Add(mediaItem);
                 }
 
+                Console.WriteLine("Processing item:" + media.Title + " - " + media.Code);
                 var post = new Post
                 {
                     Body = media.Caption.Text,
@@ -99,6 +107,10 @@ public static class Instagram
             {
                 description = fullUser.UserDetail.Biography ?? string.Empty;
             }
+        }
+        else
+        {
+            Console.WriteLine("Failed to get user!");
         }
         
         var feed = new Feed()
