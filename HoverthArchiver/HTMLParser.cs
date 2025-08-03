@@ -10,10 +10,14 @@ public class HtmlParser
     private IBrowsingContext context = null;
     private IHtmlParser parser = null;
 
-    private static readonly string[] _imageExtensions = [".gif", ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp", ".svg"];
+    private static readonly string[] _imageExtensions =
+        [".gif", ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp", ".svg"];
+
     private static readonly string[] _videoExtensions = [".mp4", ".mkv", ".mov", ".avi"];
-    private static readonly string[] _documentExtensions = [".pdf", ".doc", ".docx", ".odt", ".xlsx", ".xls", ".ppt", ".pptx", ".ods", ".odp"];
-    
+
+    private static readonly string[] _documentExtensions =
+        [".pdf", ".doc", ".docx", ".odt", ".xlsx", ".xls", ".ppt", ".pptx", ".ods", ".odp"];
+
     public HtmlParser()
     {
         //Use the default configuration for AngleSharp
@@ -23,9 +27,9 @@ public class HtmlParser
         context = BrowsingContext.New(config);
         parser = context.GetService<IHtmlParser>();
     }
-    
+
     /*
-     * 
+     *
      */
     public string FlattenText(string html)
     {
@@ -37,7 +41,7 @@ public class HtmlParser
     {
         List<string> sourceUrls = [];
         var elements = document.QuerySelectorAll(elementName);
-        foreach(var e in elements)
+        foreach (var e in elements)
         {
             try
             {
@@ -50,8 +54,8 @@ public class HtmlParser
                 Console.WriteLine(exception);
             }
         }
-        return sourceUrls;
 
+        return sourceUrls;
     }
 
     private List<string> ProcessHyperlinks(List<string> links, string[] acceptableExtensions)
@@ -65,47 +69,49 @@ public class HtmlParser
                 sourceUrls.Add(link);
             }
         }
+
         return sourceUrls;
     }
-    
+
     private List<string> GetElementHyperlinks(IHtmlDocument document, string element)
     {
         return GetElementsByAttribute(document, element, "href");
-    }   
-    
+    }
+
     private List<string> GetElementSources(IHtmlDocument document, string element)
     {
         return GetElementsByAttribute(document, element, "src");
     }
-    
+
     public List<string> GetVideos(string html)
     {
         List<string> videos = [];
         var document = parser.ParseDocument(html);
         videos.Concat(GetElementSources(document, "video"));
-        var videoLinks = GetElementHyperlinks(document, "a"); 
+        var videoLinks = GetElementHyperlinks(document, "a");
         videos.Concat(ProcessHyperlinks(videoLinks, _videoExtensions));
-        
+
         return videos;
     }
+
     public List<string> GetImages(string html)
     {
         List<string> images = [];
         var document = parser.ParseDocument(html);
         images.Concat(GetElementSources(document, "images"));
-        var imageLinks = GetElementHyperlinks(document, "a"); 
+        var imageLinks = GetElementHyperlinks(document, "a");
         images.Concat(ProcessHyperlinks(imageLinks, _imageExtensions));
-        
+
         return images;
     }
-    
+
     public List<string> GetDocuments(string html)
     {
         List<string> documents = [];
         var document = parser.ParseDocument(html);
         var documentLinks = GetElementHyperlinks(document, "a");
         documents.Concat(ProcessHyperlinks(documentLinks, _documentExtensions));
-        
+
         return documents;
     }
 }
