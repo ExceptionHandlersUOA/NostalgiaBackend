@@ -21,7 +21,7 @@ namespace NostalgiaBackend.Controllers
 
             var fileName = await StaticFiles.AddFileToSystem(stream, extension);
 
-            return CreatedAtAction(nameof(GetAsync), new { fileName }, new { fileName });
+            return Ok(fileName);
         }
 
         [HttpGet("{fileName}")]
