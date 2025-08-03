@@ -87,9 +87,9 @@ public class HtmlParser
     {
         List<string> videos = [];
         var document = parser.ParseDocument(html);
-        videos.Concat(GetElementSources(document, "video"));
+        videos = videos.Concat(GetElementSources(document, "video")).ToList();
         var videoLinks = GetElementHyperlinks(document, "a");
-        videos.Concat(ProcessHyperlinks(videoLinks, _videoExtensions));
+        videos = videos.Concat(ProcessHyperlinks(videoLinks, _videoExtensions)).ToList();
 
         return videos;
     }
@@ -98,9 +98,9 @@ public class HtmlParser
     {
         List<string> images = [];
         var document = parser.ParseDocument(html);
-        images.Concat(GetElementSources(document, "images"));
+        images = images.Concat(GetElementSources(document, "images")).ToList();
         var imageLinks = GetElementHyperlinks(document, "a");
-        images.Concat(ProcessHyperlinks(imageLinks, _imageExtensions));
+        images = images.Concat(ProcessHyperlinks(imageLinks, _imageExtensions)).ToList();
 
         return images;
     }
@@ -110,7 +110,7 @@ public class HtmlParser
         List<string> documents = [];
         var document = parser.ParseDocument(html);
         var documentLinks = GetElementHyperlinks(document, "a");
-        documents.Concat(ProcessHyperlinks(documentLinks, _documentExtensions));
+        documents = documents.Concat(ProcessHyperlinks(documentLinks, _documentExtensions)).ToList();
 
         return documents;
     }
