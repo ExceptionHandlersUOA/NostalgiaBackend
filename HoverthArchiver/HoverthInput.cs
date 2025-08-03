@@ -14,7 +14,12 @@ namespace HoverthArchiver
     public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox)
     {
         private readonly ILogger<HoverthInput> logger = logger;
-        private readonly YoutubeDL _youtubeDL = new();
+
+        private readonly YoutubeDL _youtubeDL = new() {
+            YoutubeDLPath = OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe",
+            FFmpegPath = OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe"
+        };
+
         private bool _setup = false;
 
         private readonly HttpClient _httpClient = new()
@@ -203,12 +208,12 @@ namespace HoverthArchiver
                 logger.LogInformation("Downloading youtubedl");
                 await Utils.DownloadYtDlp(Constants.BaseDirectory);
 
-                _youtubeDL.YoutubeDLPath = Path.Combine(Constants.BaseDirectory, Utils.YtDlpBinaryName);
+                _youtubeDL.YoutubeDLPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe");
 
                 logger.LogInformation("Downloading ffmpeg");
                 await Utils.DownloadFFmpeg(Constants.BaseDirectory);
 
-                _youtubeDL.FFmpegPath = Path.Combine(Constants.BaseDirectory, Utils.FfmpegBinaryName);
+                _youtubeDL.FFmpegPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe");
             }
         }
     }
