@@ -112,7 +112,7 @@ namespace HoverthArchiver
         private async Task<Feed> RssAsync(string url, Platform platform = Platform.RSS)
         {
             HtmlParser parser = new();
-            var feed = await FeedReader.ReadAsync(url);
+            var feed = await FeedReader.ReadAsync(url, true, "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0");
 
             logger.LogInformation("Feed Title: {Title}", feed.Title);
             logger.LogInformation("Feed Description: {Description}", feed.Description);
