@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Files;
+using System.ComponentModel.DataAnnotations;
 
 namespace NostalgiaBackend.Controllers
 {
@@ -10,16 +11,16 @@ namespace NostalgiaBackend.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync(IFormFile file)
+        public async Task<IActionResult> PostAsync([Required] IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file provided");
 
             var extension = Path.GetExtension(file.FileName);
             using var stream = file.OpenReadStream();
-            
+
             var fileName = await StaticFiles.AddFileToSystem(stream, extension);
-            
+
             return CreatedAtAction(nameof(GetAsync), new { fileName }, new { fileName });
         }
 

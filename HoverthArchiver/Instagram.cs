@@ -38,12 +38,16 @@ public static class Instagram
         var userMedia =
             await _instaApi.UserProcessor.GetUserMediaAsync(username, PaginationParameters.MaxPagesToLoad(100));
         var user = (await _instaApi.UserProcessor.GetUserAsync(username)).Value;
-        var fullUser = (await _instaApi.UserProcessor.GetFullUserInfoAsync(user.Pk)).Value;
 
         List<Post> posts = [];
 
-        if (fullUser != null)
+        var imageUrl = "";
+        var description = "";
+
+        if (user != null)
         {
+            var fullUser = (await _instaApi.UserProcessor.GetFullUserInfoAsync(user.Pk)).Value;
+
             if (!userMedia.Succeeded) throw new Exception("Could not get user media");
 
             foreach (var media in userMedia.Value)
@@ -85,18 +89,16 @@ public static class Instagram
 
                 posts.Add(post);
             }
-        }
 
-        var imageUrl = "";
-        if (user.ProfilePicUrl != null)
-        {
-            imageUrl = await h.DownloadFile(user.ProfilePicUrl);
-        }
+            if (user.ProfilePicUrl != null)
+            {
+                imageUrl = await h.DownloadFile(user.ProfilePicUrl);
+            }
 
-        var description = "";
-        if (fullUser != null)
-        {
-            description = fullUser.UserDetail.Biography ?? string.Empty;
+            if (fullUser != null)
+            {
+                description = fullUser.UserDetail.Biography ?? string.Empty;
+            }
         }
         
         var feed = new Feed()

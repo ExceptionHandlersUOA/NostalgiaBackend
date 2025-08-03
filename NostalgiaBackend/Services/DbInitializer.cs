@@ -7,6 +7,10 @@ namespace NostalgiaBackend.Services
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            logger.LogInformation("Downloading deps...");
+
+            await hoverth.DownloadDeps();
+
             logger.LogInformation("Starting database initialization...");
 
             using var scope = serviceProvider.CreateScope();
@@ -23,7 +27,7 @@ namespace NostalgiaBackend.Services
                 "https://github.com/FeroxFoxxo",
                 "https://www.hoverth.net/index.xml",
                 "https://www.instagram.com/cristiano",
-                "https://www.youtube.com/channel/UCRC6cNamj9tYAO6h_RXd5xA",
+                "https://www.youtube.com/channel/UCFZ1dO0j7fmX5P1OoDRGMjg",
                 "https://reddit.com/u/FraudKid"
             };
 

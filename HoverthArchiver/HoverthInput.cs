@@ -2,6 +2,7 @@
 using FeroxArchiver;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shared;
 using Shared.Enums;
 using Shared.Files;
 using Shared.Models;
@@ -10,10 +11,11 @@ using Feed = Shared.Models.Feed;
 
 namespace HoverthArchiver
 {
-    public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox) : IHostedService
+    public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox)
     {
         private readonly ILogger<HoverthInput> logger = logger;
         private readonly YoutubeDL _youtubeDL = new();
+        private bool _setup = false;
 
         private readonly HttpClient _httpClient = new()
         {
@@ -63,30 +65,33 @@ namespace HoverthArchiver
 
             foreach (var post in youtubeRss.Posts)
             {
-                var source = post.SourceUrl;
-
-                var video = await _youtubeDL.RunVideoDownload(source);
-                var metadata = await _youtubeDL.RunVideoDataFetch(source);
-
-                if (video.Success)
+                try
                 {
-                    using var stream = File.OpenRead(video.Data);
+                    var source = post.SourceUrl;
 
-                    var thumbnailUrl = metadata.Data.Thumbnail;
-                    logger.LogInformation("Downloading thumbnail: {thumbnail}", thumbnailUrl);
+                    var video = await _youtubeDL.RunVideoDownload(source);
+                    var metadata = await _youtubeDL.RunVideoDataFetch(source);
 
-                    var stream2 = await _httpClient.GetStreamAsync(thumbnailUrl);
-                    var thumbnail = await StaticFiles.AddFileToSystem(stream2, "jpg");
-
-                    var media = new Media()
+                    if (video.Success)
                     {
-                        Type = FileType.Video,
-                        FileName = await StaticFiles.AddFileToSystem(stream, metadata.Data.Extension),
-                        ThumbnailFileName = thumbnail,
-                    };
+                        using var stream = File.OpenRead(video.Data);
 
-                    post.Media.Add(media);
-                }
+                        var thumbnailUrl = metadata.Data.Thumbnail;
+                        logger.LogInformation("Downloading thumbnail: {thumbnail}", thumbnailUrl);
+
+                        var stream2 = await _httpClient.GetStreamAsync(thumbnailUrl);
+                        var thumbnail = await StaticFiles.AddFileToSystem(stream2, "jpg");
+
+                        var media = new Media()
+                        {
+                            Type = FileType.Video,
+                            FileName = await StaticFiles.AddFileToSystem(stream, metadata.Data.Extension),
+                            ThumbnailFileName = thumbnail,
+                        };
+
+                        post.Media.Add(media);
+                    }
+                } catch (Exception e) { logger.LogError(e, "Exception found for youtube"); }
             }
 
             return youtubeRss;
@@ -189,15 +194,21 @@ namespace HoverthArchiver
             return feedModel;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task DownloadDeps()
         {
-            await Utils.DownloadYtDlp();
-            await Utils.DownloadFFmpeg();
-        }
+            if (!_setup)
+            {
+                _setup = true;
+                logger.LogInformation("Downloading youtubedl");
+                await Utils.DownloadYtDlp(Constants.BaseDirectory);
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
+                _youtubeDL.YoutubeDLPath = Path.Combine(Constants.BaseDirectory, Utils.YtDlpBinaryName);
+
+                logger.LogInformation("Downloading ffmpeg");
+                await Utils.DownloadFFmpeg(Constants.BaseDirectory);
+
+                _youtubeDL.FFmpegPath = Path.Combine(Constants.BaseDirectory, Utils.FfmpegBinaryName);
+            }
         }
     }
 }
