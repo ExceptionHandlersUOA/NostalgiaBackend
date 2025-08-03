@@ -40,48 +40,51 @@ public static class Instagram
         var user = (await _instaApi.UserProcessor.GetUserAsync(username)).Value;
         var fullUser = (await _instaApi.UserProcessor.GetFullUserInfoAsync(user.Pk)).Value;
 
-        if (!userMedia.Succeeded) throw new Exception("Could not get user media");
+        List<Post> posts = [];
 
-        List<Post> posts = new List<Post>();
-
-        foreach (var media in userMedia.Value)
+        if (fullUser != null)
         {
-            List<Media> mediaItems = new List<Media>();
+            if (!userMedia.Succeeded) throw new Exception("Could not get user media");
 
-            foreach (var item in media.Images)
+            foreach (var media in userMedia.Value)
             {
-                if (item.Uri == null) continue;
-                var filename = await h.DownloadFile(item.Uri);
-                var mediaItem = new Media()
+                List<Media> mediaItems = [];
+
+                foreach (var item in media.Images)
                 {
-                    Type = FileType.Image,
-                    FileName = filename,
-                };
-                mediaItems.Add(mediaItem);
-            }
+                    if (item.Uri == null) continue;
+                    var filename = await h.DownloadFile(item.Uri);
+                    var mediaItem = new Media()
+                    {
+                        Type = FileType.Image,
+                        FileName = filename,
+                    };
+                    mediaItems.Add(mediaItem);
+                }
 
-            foreach (var item in media.Videos)
-            {
-                if (item.Uri == null) continue;
-                var filename = await h.DownloadFile(item.Uri);
-                var mediaItem = new Media()
+                foreach (var item in media.Videos)
                 {
-                    Type = FileType.Video,
-                    FileName = filename,
+                    if (item.Uri == null) continue;
+                    var filename = await h.DownloadFile(item.Uri);
+                    var mediaItem = new Media()
+                    {
+                        Type = FileType.Video,
+                        FileName = filename,
+                    };
+                    mediaItems.Add(mediaItem);
+                }
+
+                var post = new Post
+                {
+                    Body = media.Caption.Text,
+                    Title = media.Title,
+                    Description = string.Empty,
+                    PublishedAt = media.DeviceTimeStamp,
+                    Media = mediaItems,
                 };
-                mediaItems.Add(mediaItem);
+
+                posts.Add(post);
             }
-
-            var post = new Post
-            {
-                Body = media.Caption.Text,
-                Title = media.Title,
-                Description = string.Empty,
-                PublishedAt = media.DeviceTimeStamp,
-                Media = mediaItems,
-            };
-
-            posts.Add(post);
         }
 
         var imageUrl = "";
