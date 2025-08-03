@@ -233,8 +233,6 @@ namespace HoverthArchiver
                     logger.LogInformation("yt-dlp already exists, skipping download");
                 }
 
-                _youtubeDL.YoutubeDLPath = ytdlpPath;
-
                 if (!OperatingSystem.IsWindows())
                     File.SetUnixFileMode(ytdlpPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite);
 
@@ -250,8 +248,6 @@ namespace HoverthArchiver
 
                 if (!OperatingSystem.IsWindows())
                     File.SetUnixFileMode(ffmpegPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite);
-
-                _youtubeDL.FFmpegPath = ffmpegPath;
 
                 _youtubeDL = new YoutubeDL()
                 {
