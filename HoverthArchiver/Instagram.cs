@@ -35,16 +35,17 @@ public static class Instagram
             .Build();
 
         await _instaApi.LoginAsync(true);
+        Thread.Sleep(1000);
         if (!_instaApi.IsUserAuthenticated) throw new Exception("User not authenticated");
 
         HoverthInput h = new HoverthInput(null, null);
         Console.WriteLine(_instaApi.IsUserAuthenticated);
         var username = url.Split('?').First().TrimEnd('/').Split('/').LastOrDefault();
-        Console.WriteLine(username);
-        Console.WriteLine(_instaApi.UserProcessor.ToString());
         var userMedia =
             await _instaApi.UserProcessor.GetUserMediaAsync(username, PaginationParameters.MaxPagesToLoad(100));
+        Thread.Sleep(1000);
         var user = (await _instaApi.UserProcessor.GetUserAsync(username)).Value;
+        Thread.Sleep(1000);
 
         List<Post> posts = [];
 
@@ -59,6 +60,7 @@ public static class Instagram
 
             foreach (var media in userMedia.Value)
             {
+                Thread.Sleep(1000);
                 List<Media> mediaItems = [];
 
                 foreach (var item in media.Images)
