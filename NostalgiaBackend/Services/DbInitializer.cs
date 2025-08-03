@@ -28,7 +28,9 @@ namespace NostalgiaBackend.Services
                 "https://www.hoverth.net/index.xml",
                 "https://www.instagram.com/cristiano",
                 "https://www.youtube.com/channel/UCFZ1dO0j7fmX5P1OoDRGMjg",
-                "https://reddit.com/u/FraudKid"
+                "https://reddit.com/u/FraudKid",
+                "https://cdn.jwz.org/blog/feed/",
+                "https://blog.ncase.me/feed.xml"
             };
 
             foreach (var url in feedUrls)
