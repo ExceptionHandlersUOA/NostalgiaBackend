@@ -1,21 +1,26 @@
 ﻿using CodeHollow.FeedReader;
+using FeroxArchiver;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
-using Feed = Shared.Models.Feed;
-using Shared.Models;
 using Shared.Files;
-using FeroxArchiver;
+using Shared.Models;
+using YoutubeDLSharp;
+using Feed = Shared.Models.Feed;
 
 namespace HoverthArchiver
 {
-    public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox)
+    public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox) : IHostedService
     {
         private readonly ILogger<HoverthInput> logger = logger;
+        private readonly YoutubeDL _youtubeDL = new();
 
         private readonly HttpClient _httpClient = new()
         {
             Timeout = new TimeSpan(0, 5, 0) // 5 minute timeout,
         };
+
+        private readonly FeroxInput ferox = ferox;
 
         public async Task<Feed> AddFeed(string url, Platform platform = Platform.RSS)
         {
@@ -52,12 +57,39 @@ namespace HoverthArchiver
 
         private async Task<Feed> YouTube(string url)
         {
-            // change yt channel link into https://www.youtube.com/feeds/videos.xml?channel_id=UCRC6cNamj9tYAO6h_RXd5xA format
-            // https://www.youtube.com/channel/UCRC6cNamj9tYAO6h_RXd5xA
-
             string channelId = url.Split('/').Last().Split('?').First();
             var rssUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
-            return await RssAsync(rssUrl, Platform.YouTube);
+            var youtubeRss = await RssAsync(rssUrl, Platform.YouTube);
+
+            foreach (var post in youtubeRss.Posts)
+            {
+                var source = post.SourceUrl;
+
+                var video = await _youtubeDL.RunVideoDownload(source);
+                var metadata = await _youtubeDL.RunVideoDataFetch(source);
+
+                if (video.Success)
+                {
+                    using var stream = File.OpenRead(video.Data);
+
+                    var thumbnailUrl = metadata.Data.Thumbnail;
+                    logger.LogInformation("Downloading thumbnail: {thumbnail}", thumbnailUrl);
+
+                    var stream2 = await _httpClient.GetStreamAsync(thumbnailUrl);
+                    var thumbnail = await StaticFiles.AddFileToSystem(stream2, "jpg");
+
+                    var media = new Media()
+                    {
+                        Type = FileType.Video,
+                        FileName = await StaticFiles.AddFileToSystem(stream, metadata.Data.Extension),
+                        ThumbnailFileName = thumbnail,
+                    };
+
+                    post.Media.Add(media);
+                }
+            }
+
+            return youtubeRss;
         }
 
         public async Task<string> DownloadFile(string url)
@@ -152,6 +184,17 @@ namespace HoverthArchiver
             };
 
             return feedModel;
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            await Utils.DownloadYtDlp();
+            await Utils.DownloadFFmpeg();
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

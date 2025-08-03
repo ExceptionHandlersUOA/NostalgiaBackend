@@ -60,11 +60,14 @@ namespace FeroxArchiver
                 });
             }
 
+            var imageUrl = userRoot.GetProperty("avatar_url").GetString();
+            var imageName = await StaticFiles.AddFileToSystem(await httpClient.GetStreamAsync(imageUrl), "jpg");
+
             return new Feed
             {
                 Title = userRoot.TryGetProperty("name", out var name) ? name.GetString() ?? username : username,
                 Description = userRoot.TryGetProperty("bio", out var bio) ? bio.GetString() ?? "" : "",
-                ImageUrl = userRoot.GetProperty("avatar_url").GetString() ?? "",
+                ImageUrl = imageName,
                 Url = url,
                 Posts = posts,
                 Platform = Platform.GitHub
