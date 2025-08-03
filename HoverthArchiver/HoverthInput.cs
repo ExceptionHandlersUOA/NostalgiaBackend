@@ -89,8 +89,11 @@ namespace HoverthArchiver
 
                 var textContent = parser.FlattenText(item.Content);
                 var imageUrls = parser.GetImages(item.Content);
+                imageUrls.Concat(parser.GetImages(item.Description));
                 var videoUrls = parser.GetVideos(item.Content);
+                videoUrls.Concat(parser.GetVideos(item.Description));
                 var documentUrls = parser.GetDocuments(item.Content);
+                documentUrls.Concat(parser.GetDocuments(item.Description));
 
                 List<Media> mediaList = [];
 
