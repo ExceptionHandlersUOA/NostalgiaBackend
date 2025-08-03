@@ -19,7 +19,7 @@ namespace NostalgiaBackend.Controllers
                 return BadRequest("Search query is required");
             }
 
-            var posts = await context.Posts.Where(p => p.Categories.Contains(query) || p.SourceUrl.Contains(query) ||
+            var posts = await context.Posts.Include(p => p.Media).Where(p => p.Categories.Contains(query) || p.SourceUrl.Contains(query) ||
                 p.Title.Contains(query) || p.Body.Contains(query) || p.Description.Contains(query)).ToListAsync();
 
             return Ok(posts);
