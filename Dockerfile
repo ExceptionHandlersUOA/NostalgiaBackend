@@ -8,12 +8,14 @@ WORKDIR /app
 USER root
 
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
+    apt-get install -y python3-full python3-pip && \
     ln -sf /usr/bin/python3 /usr/bin/python && \
     python --version && \
-    pip3 install --upgrade pip
+    python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip
 
-USER $APP_UID
+ENV PATH="/opt/venv/bin:$PATH"
+
 
 EXPOSE 8080
 EXPOSE 8081
