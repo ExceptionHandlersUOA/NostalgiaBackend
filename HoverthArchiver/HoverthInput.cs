@@ -9,6 +9,7 @@ using Shared.Models;
 using System;
 using System.Text;
 using YoutubeDLSharp;
+using YoutubeDLSharp.Options;
 using Feed = Shared.Models.Feed;
 
 namespace HoverthArchiver
@@ -17,9 +18,9 @@ namespace HoverthArchiver
     {
         private readonly ILogger<HoverthInput> logger = logger;
 
-        private readonly YoutubeDL _youtubeDL = new() {
-            YoutubeDLPath = OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe",
-            FFmpegPath = OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe"
+        private readonly YoutubeDL _youtubeDL = new() { 
+            OutputFolder = Constants.BaseDirectory,
+            RestrictFilenames = true,
         };
 
         private bool _setup = false;
@@ -79,7 +80,9 @@ namespace HoverthArchiver
                     var video = await _youtubeDL.RunVideoDownload(source);
                     var metadata = await _youtubeDL.RunVideoDataFetch(source);
 
-                    if (video.Success)
+                    logger.LogInformation("Video downloaded successfully: {videoPath}", video.Data);
+
+                    if (video.Success && !string.IsNullOrEmpty(video.Data) && File.Exists(video.Data))
                     {
                         using FileStream stream = new(
                             video.Data,
@@ -105,6 +108,10 @@ namespace HoverthArchiver
                         };
 
                         post.Media.Add(media);
+                    }
+                    else if (video.Success && !File.Exists(video.Data))
+                    {
+                        logger.LogWarning("Video file not found at path: {VideoPath}", video.Data);
                     }
                 } catch (Exception e) { logger.LogError(e, "Exception found for youtube"); }
             }
@@ -215,8 +222,8 @@ namespace HoverthArchiver
             {
                 _setup = true;
                 
-                var ytdlpPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "yt-dlp" : "yt-dlp.exe");
-                var ffmpegPath = Path.Combine(Constants.BaseDirectory, OperatingSystem.IsLinux() ? "ffmpeg" : "ffmpeg.exe");
+                var ytdlpPath = Path.Combine(Constants.BaseDirectory, Utils.YtDlpBinaryName);
+                var ffmpegPath = Path.Combine(Constants.BaseDirectory, Utils.FfmpegBinaryName);
                 
                 if (!File.Exists(ytdlpPath))
                 {
