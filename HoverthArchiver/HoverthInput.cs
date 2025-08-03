@@ -10,7 +10,6 @@ namespace HoverthArchiver
 {
     public class HoverthInput(ILogger<HoverthInput> logger, FeroxInput ferox)
     {
-        private const string _basePath = "/tmp/";
         private readonly ILogger<HoverthInput> logger = logger;
 
         private readonly HttpClient _httpClient = new()
@@ -65,13 +64,12 @@ namespace HoverthArchiver
         {
             var remoteFilename = url.Split('/').Last().Split('?').First();
             var extension = remoteFilename.Split('.').Last();
-            string filename = _basePath + Guid.NewGuid() + extension;
 
             var stream = await _httpClient.GetStreamAsync(url);
 
-            await StaticFiles.AddFileToSystem(stream, extension);
+            var file = await StaticFiles.AddFileToSystem(stream, extension);
 
-            return filename;
+            return file;
         }
 
         private async Task<Feed> RssAsync(string url, Platform platform = Platform.RSS)
