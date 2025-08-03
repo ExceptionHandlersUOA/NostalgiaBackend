@@ -126,12 +126,12 @@ namespace HoverthArchiver
                 logger.LogInformation("Processing item: {Title} - {Link}", item.Title, item.Link);
 
                 var textContent = parser.FlattenText(item.Content);
-                var imageUrls = parser.GetImages(item.Content);
-                imageUrls.Concat(parser.GetImages(item.Description));
-                var videoUrls = parser.GetVideos(item.Content);
-                videoUrls.Concat(parser.GetVideos(item.Description));
-                var documentUrls = parser.GetDocuments(item.Content);
-                documentUrls.Concat(parser.GetDocuments(item.Description));
+                var imageUrls = parser.GetImages(item.Content) ?? [];
+                imageUrls = imageUrls.Concat(parser.GetImages(item.Description)).ToList();
+                var videoUrls = parser.GetVideos(item.Content) ?? [];
+                videoUrls = videoUrls.Concat(parser.GetVideos(item.Description)).ToList();
+                var documentUrls = parser.GetDocuments(item.Content) ?? [];
+                documentUrls = documentUrls.Concat(parser.GetDocuments(item.Description)).ToList();
 
                 List<Media> mediaList = [];
 
