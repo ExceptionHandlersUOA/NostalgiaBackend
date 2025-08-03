@@ -6,6 +6,8 @@ using Shared;
 using Shared.Enums;
 using Shared.Files;
 using Shared.Models;
+using System;
+using System.Text;
 using YoutubeDLSharp;
 using Feed = Shared.Models.Feed;
 
@@ -79,7 +81,14 @@ namespace HoverthArchiver
 
                     if (video.Success)
                     {
-                        using var stream = File.OpenRead(video.Data);
+                        using FileStream stream = new(
+                            video.Data,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.Read,
+                            bufferSize: 4096,
+                            useAsync: true
+                        );
 
                         var thumbnailUrl = metadata.Data.Thumbnail;
                         logger.LogInformation("Downloading thumbnail: {thumbnail}", thumbnailUrl);
